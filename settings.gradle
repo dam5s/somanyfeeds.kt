@@ -1,0 +1,4 @@
+rootProject.name="somanyfeeds.kt"
+
+include "application"
+include "components/http-servlet-testing"

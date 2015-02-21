@@ -1,0 +1,27 @@
+group "com.somanyfeeds"
+version "1.0-SNAPSHOT"
+description """SoManyFeeds a simple feed aggregator"""
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:0.9.976"
+    }
+}
+
+
+subprojects {
+    apply plugin: "kotlin"
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib:0.9.976"
+        testCompile "junit:junit:4.11"
+    }
+}
