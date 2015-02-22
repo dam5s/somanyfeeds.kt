@@ -3,7 +3,7 @@ import com.somanyfeeds.application.SoManyFeedsServlet
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class SoManyFeedsServletSpecks : Spek() {{
+class SoManyFeedsServletSpec : Spek() {{
     given("a SoManyFeedsServlet") {
         val servlet = SoManyFeedsServlet()
 
