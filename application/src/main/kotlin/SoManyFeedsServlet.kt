@@ -8,7 +8,7 @@ import com.somanyfeeds.aggregator.DefaultArticlesController
 WebServlet(name = "SoManyFeeds", value = array("/*"))
 public class SoManyFeedsServlet(
     val staticAssetsController: StaticAssetsController = DefaultStaticAssetsController(),
-    val articlesController: ArticlesController = DefaultArticlesController()
+    val articlesController: ArticlesController = DefaultArticlesController(InMemoryDataGateway)
 ) : HttpServlet() {
 
     override public fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {

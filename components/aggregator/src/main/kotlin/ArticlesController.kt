@@ -2,14 +2,24 @@ package com.somanyfeeds.aggregator
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import com.somanyfeeds.jsonserialization.ObjectMapperProvider
 
 public trait ArticlesController {
     public fun listArticles(req: HttpServletRequest, resp: HttpServletResponse)
 }
 
-class DefaultArticlesController : ArticlesController {
+class DefaultArticlesController(
+    val articleDataGateway: ArticleDataGateway = PostgresArticleDataGateway()
+) : ArticlesController {
+
+    val objectMapper = ObjectMapperProvider().get()
+
     override fun listArticles(req: HttpServletRequest, resp: HttpServletResponse) {
         resp.setContentType("application/json")
-        resp.getWriter().write("[]")
+
+        objectMapper.writeValue(
+            resp.getWriter(),
+            articleDataGateway.selectArticles()
+        )
     }
 }

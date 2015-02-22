@@ -1,3 +1,6 @@
 dependencies {
+    compile project(":components/json-serialization")
     compile "javax:javaee-api:7.0"
+
+    testCompile project(":components/http-servlet-testing")
 }
