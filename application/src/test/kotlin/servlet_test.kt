@@ -1,16 +1,35 @@
-import org.junit.Test as test
+import org.jetbrains.spek.api.Spek
 import com.somanyfeeds.application.SoManyFeedsServlet
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class SoManyFeedsServletTest {
-    test fun doGet() {
-        val req = TestHttpServletRequest()
-        val resp = TestHttpServletResponse()
+class SoManyFeedsServletSpecks : Spek() {{
+    given("a SoManyFeedsServlet") {
         val servlet = SoManyFeedsServlet()
 
-        servlet.doGet(req, resp)
+        on("asset request") {
+            val assetReq = TestHttpServletRequest(path = "/css/base.css")
+            val assetResp = TestHttpServletResponse()
 
-        val body = resp.getBody()
-        assertTrue(body.contains("<h1>damo.io</h1>"))
+            servlet.doGet(assetReq, assetResp)
+
+            it("renders the static asset") {
+                assertEquals(assetResp.getContentType(), "text/css")
+                assertTrue(assetResp.getBody().contains("font-family"))
+            }
+        }
+
+        on("articles request") {
+            val reqHeaders = mapOf("accept" to listOf("application/json"))
+            val articlesReq = TestHttpServletRequest(path = "/articles", headers = reqHeaders)
+            val articlesResp = TestHttpServletResponse()
+
+            servlet.doGet(articlesReq, articlesResp)
+
+            it("returns articles JSON") {
+                assertEquals(articlesResp.getContentType(), "application/json")
+                assertEquals(articlesResp.getBody(), "[]")
+            }
+        }
     }
-}
+}}

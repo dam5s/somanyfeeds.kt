@@ -8,6 +8,7 @@ import java.io.StringWriter
 class TestHttpServletResponse() : HttpServletResponse {
     val stringWriter: StringWriter = StringWriter()
     val internalPrintWriter: PrintWriter = PrintWriter(stringWriter)
+    val headers: MutableMap<String, String> = hashMapOf()
 
     fun getBody(): String {
         return stringWriter.toString()
@@ -19,9 +20,7 @@ class TestHttpServletResponse() : HttpServletResponse {
         throw UnsupportedOperationException()
     }
 
-    override fun getContentType(): String? {
-        throw UnsupportedOperationException()
-    }
+    override fun getContentType(): String? = getHeader("Content-Type")
 
     override fun getOutputStream(): ServletOutputStream? {
         throw UnsupportedOperationException()
@@ -43,9 +42,7 @@ class TestHttpServletResponse() : HttpServletResponse {
         throw UnsupportedOperationException()
     }
 
-    override fun setContentType(type: String?) {
-        throw UnsupportedOperationException()
-    }
+    override fun setContentType(type: String?) = setHeader("Content-Type", type)
 
     override fun setBufferSize(size: Int) {
         throw UnsupportedOperationException()
@@ -124,7 +121,7 @@ class TestHttpServletResponse() : HttpServletResponse {
     }
 
     override fun setHeader(name: String?, value: String?) {
-        throw UnsupportedOperationException()
+        headers[name!!] = value!!
     }
 
     override fun addHeader(name: String?, value: String?) {
@@ -152,7 +149,7 @@ class TestHttpServletResponse() : HttpServletResponse {
     }
 
     override fun getHeader(name: String?): String? {
-        throw UnsupportedOperationException()
+        return headers[name]
     }
 
     override fun getHeaders(name: String?): MutableCollection<String>? {

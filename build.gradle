@@ -1,14 +1,17 @@
 group "com.somanyfeeds"
 version "1.0-SNAPSHOT"
-description """SoManyFeeds a simple feed aggregator"""
+description "SoManyFeeds a simple feed aggregator"
 
 buildscript {
+    ext {
+        kotlinVersion = "0.10.195"
+        spekVersion = "0.1.145"
+    }
     repositories {
         mavenCentral()
     }
-
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:0.9.976"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
@@ -17,11 +20,16 @@ subprojects {
     apply plugin: "kotlin"
 
     repositories {
+        maven {
+            url "http://repository.jetbrains.com/all"
+        }
         mavenCentral()
     }
 
     dependencies {
-        compile "org.jetbrains.kotlin:kotlin-stdlib:0.9.976"
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
         testCompile "junit:junit:4.11"
+        testCompile "org.jetbrains.spek:spek:$spekVersion"
     }
 }

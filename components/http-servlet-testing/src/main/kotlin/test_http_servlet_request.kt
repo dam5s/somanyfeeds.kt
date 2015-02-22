@@ -16,7 +16,11 @@ import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.Part
 import javax.servlet.http.HttpUpgradeHandler
 
-class TestHttpServletRequest : HttpServletRequest {
+class TestHttpServletRequest(
+    val path: String = "/",
+    val headers: Map<String, List<String>> = emptyMap()
+) : HttpServletRequest {
+
     override fun getAttribute(name: String?): Any? {
         throw UnsupportedOperationException()
     }
@@ -177,9 +181,7 @@ class TestHttpServletRequest : HttpServletRequest {
         throw UnsupportedOperationException()
     }
 
-    override fun getHeader(name: String?): String? {
-        throw UnsupportedOperationException()
-    }
+    override fun getHeader(name: String?): String? = headers.get(name)?.get(0)
 
     override fun getHeaders(name: String?): Enumeration<String>? {
         throw UnsupportedOperationException()
@@ -198,7 +200,7 @@ class TestHttpServletRequest : HttpServletRequest {
     }
 
     override fun getPathInfo(): String? {
-        return "/"
+        return path
     }
 
     override fun getPathTranslated(): String? {
