@@ -291,7 +291,7 @@ class TestHttpServletRequest(
         throw UnsupportedOperationException()
     }
 
-    override fun <T : HttpUpgradeHandler?> upgrade(handlerClass: Class<T>?): T? {
+    override fun <T : HttpUpgradeHandler?> upgrade(handlerClass: Class<T>?): T {
         throw UnsupportedOperationException()
     }
 }
