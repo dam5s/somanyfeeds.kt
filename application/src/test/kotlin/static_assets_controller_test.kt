@@ -1,8 +1,9 @@
-import com.somanyfeeds.application.SoManyFeedsServlet
 import kotlin.test.assertTrue
 import kotlin.test.assertEquals
 import org.jetbrains.spek.api.Spek
 import com.somanyfeeds.application.DefaultStaticAssetsController
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 
 class StaticAssetsControllerSpec : Spek() {{
     given("a static assets controller", {
@@ -39,6 +40,23 @@ class StaticAssetsControllerSpec : Spek() {{
             }
             it("sets the content-type") {
                 assertEquals("text/css", cssResp.getContentType())
+            }
+        }
+
+        on("request that does not match an asset") {
+            val noMatchReq = TestHttpServletRequest(path = "/i-dont-exist.css")
+            val noMatchResp = TestHttpServletResponse()
+
+            val result = controller.serveStaticAsset(noMatchReq, noMatchResp)
+
+            it("returns false") {
+                assertFalse(result)
+            }
+            it("body is empty") {
+                assertTrue(noMatchResp.getBody().isEmpty())
+            }
+            it("content-type is not set") {
+                assertNull(noMatchResp.getContentType())
             }
         }
     })
