@@ -1,0 +1,8 @@
+dependencies {
+    compile "org.postgresql:postgresql:9.4-1200-jdbc41"
+    compile "org.springframework:spring-beans:$springVersion"
+    compile "org.springframework:spring-context:$springVersion"
+    compile "org.springframework:spring-jdbc:$springVersion"
+    compile "org.mybatis:mybatis:$myBatisVersion"
+    compile "org.mybatis:mybatis-spring:1.2.2"
+}

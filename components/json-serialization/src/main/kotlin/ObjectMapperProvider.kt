@@ -11,18 +11,16 @@ import com.fasterxml.jackson.databind.SerializerProvider
 class ObjectMapperProvider {
     fun get(): ObjectMapper {
         val module = SimpleModule()
-        module.addSerializer(javaClass<ZonedDateTime>(), ZonedDateTimeSerializer())
+        module.addSerializer(javaClass<ZonedDateTime>(), object : JsonSerializer<ZonedDateTime>() {
+            override fun serialize(value: ZonedDateTime, jgen: JsonGenerator, provider: SerializerProvider) {
+                jgen.writeString(value.toString())
+            }
+        })
 
-        return ObjectMapper().let {
+        ObjectMapper().let {
             it.registerKotlinModule()
             it.registerModule(module)
             return it
         }
-    }
-}
-
-class ZonedDateTimeSerializer : JsonSerializer<ZonedDateTime>() {
-    override fun serialize(value: ZonedDateTime, jgen: JsonGenerator, provider: SerializerProvider) {
-        jgen.writeString(value.toString())
     }
 }

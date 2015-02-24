@@ -6,6 +6,8 @@ buildscript {
     ext {
         kotlinVersion = "0.10.195"
         spekVersion = "0.1.145"
+        springVersion = "4.1.5.RELEASE"
+        myBatisVersion = "3.2.8"
     }
     repositories {
         mavenCentral()

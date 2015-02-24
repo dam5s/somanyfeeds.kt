@@ -8,10 +8,7 @@ public trait ArticlesController {
     public fun listArticles(req: HttpServletRequest, resp: HttpServletResponse)
 }
 
-class DefaultArticlesController(
-    val articleDataGateway: ArticleDataGateway = PostgresArticleDataGateway()
-) : ArticlesController {
-
+class DefaultArticlesController(val articleDataGateway: ArticleDataGateway) : ArticlesController {
     val objectMapper = ObjectMapperProvider().get()
 
     override fun listArticles(req: HttpServletRequest, resp: HttpServletResponse) {

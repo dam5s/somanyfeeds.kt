@@ -1,6 +1,8 @@
 dependencies {
     compile project(":components/json-serialization")
     compile "javax:javaee-api:7.0"
+    compile "org.mybatis:mybatis:$myBatisVersion"
 
     testCompile project(":components/http-servlet-testing")
+    testCompile project(":components/database-testing")
 }

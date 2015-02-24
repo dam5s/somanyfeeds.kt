@@ -3,4 +3,6 @@ rootProject.name="somanyfeeds.kt"
 include "application"
 include "components/aggregator"
 include "components/json-serialization"
+
 include "components/http-servlet-testing"
+include "components/database-testing"
