@@ -1,9 +1,8 @@
 package com.somanyfeeds.aggregator
 
 import org.apache.ibatis.annotations.Select
-import java.time.ZoneId
-import java.time.ZonedDateTime
 import java.sql.Timestamp
+import com.somanyfeeds.kotlinextensions.toUtcZonedDateTime
 
 public trait ArticleDataGateway {
     fun selectArticles(): List<Article>;
@@ -32,11 +31,7 @@ class ArticleMapping {
             title = this.title,
             link = this.link,
             content = this.content,
-            date = this.date!!.toZonedDateTime()
+            date = this.date!!.toUtcZonedDateTime()
         )
     }
-}
-
-fun java.sql.Timestamp.toZonedDateTime(): ZonedDateTime {
-    return this.toLocalDateTime().atZone(ZoneId.of("UTC"))
 }
