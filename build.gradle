@@ -30,6 +30,9 @@ subprojects {
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        if (!project.name.contains("kotlin-extensions")) {
+            compile project(":components/kotlin-extensions")
+        }
 
         testCompile "junit:junit:4.11"
         testCompile "org.jetbrains.spek:spek:$spekVersion"

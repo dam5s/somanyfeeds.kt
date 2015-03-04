@@ -8,10 +8,20 @@ import org.mybatis.spring.SqlSessionFactoryBean
 import org.mybatis.spring.mapper.MapperFactoryBean
 import com.somanyfeeds.aggregator.PostgresArticleDataGateway
 import com.somanyfeeds.aggregator.ArticleDataMapper
+import com.somanyfeeds.kotlinextensions.tap
 
 object ServiceLocator {
-    val dataSource: DataSource = buildDataSource()
-    val sqlSessionFactoryBean = buildSqlSessionFactoryBean()
+    val dataSource: DataSource = PGSimpleDataSource().tap {
+        it.setUser("dam5s")
+        it.setServerName("localhost")
+        it.setPortNumber(5432)
+        it.setDatabaseName("somanyfeeds_dev")
+    }
+
+    val sqlSessionFactoryBean = SqlSessionFactoryBean().tap {
+        it.setDataSource(dataSource)
+    }
+
     val staticAssetsController = DefaultStaticAssetsController()
     val articleDataMapper = buildDataMapper(javaClass<ArticleDataMapper>())
     val articleDataGateway = PostgresArticleDataGateway(articleDataMapper = articleDataMapper);
@@ -21,31 +31,16 @@ object ServiceLocator {
 
     fun articlesController(): ArticlesController = articlesController
 
-    private fun buildDataSource(): PGSimpleDataSource {
-        PGSimpleDataSource().let {
-            it.setUser("dam5s")
-            it.setServerName("localhost")
-            it.setPortNumber(5432)
-            it.setDatabaseName("somanyfeeds_dev")
-            return it
-        }
-    }
 
     private fun buildDataMapper<T>(klass: Class<T>): T {
-        val sqlSessionFactory = sqlSessionFactoryBean.getObject()
-        sqlSessionFactory.getConfiguration().addMapper(klass)
+        val sqlSessionFactory = sqlSessionFactoryBean.getObject().tap {
+            it.getConfiguration().addMapper(klass)
+        }
 
-        val dataMapperFactory = MapperFactoryBean<T>()
-        dataMapperFactory.setMapperInterface(klass)
-        dataMapperFactory.setSqlSessionFactory(sqlSessionFactory)
-
-        return dataMapperFactory.getObject()
-    }
-
-    fun buildSqlSessionFactoryBean(): SqlSessionFactoryBean {
-        SqlSessionFactoryBean().let {
-            it.setDataSource(dataSource)
-            return it
+        return MapperFactoryBean<T>().let { dataMapperFactory ->
+            dataMapperFactory.setMapperInterface(klass)
+            dataMapperFactory.setSqlSessionFactory(sqlSessionFactory)
+            dataMapperFactory.getObject()
         }
     }
 }

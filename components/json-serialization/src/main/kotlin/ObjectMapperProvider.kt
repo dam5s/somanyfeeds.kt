@@ -1,12 +1,13 @@
 package com.somanyfeeds.jsonserialization
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.fasterxml.jackson.databind.module.SimpleModule
 import java.time.ZonedDateTime
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.SerializerProvider
+import com.somanyfeeds.kotlinextensions.tap
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 class ObjectMapperProvider {
     fun get(): ObjectMapper {
@@ -17,10 +18,9 @@ class ObjectMapperProvider {
             }
         })
 
-        ObjectMapper().let {
+        return ObjectMapper().tap {
             it.registerKotlinModule()
             it.registerModule(module)
-            return it
         }
     }
 }

@@ -6,3 +6,4 @@ include "components/json-serialization"
 
 include "components/http-servlet-testing"
 include "components/database-testing"
+include "components/kotlin-extensions"
