@@ -6,20 +6,21 @@ import java.io.InputStream
 import java.io.PrintWriter
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import com.somanyfeeds.kotlinextensions.getResourceAsStream
 
 trait StaticAssetsController {
     fun serveStaticAsset(req: HttpServletRequest, resp: HttpServletResponse): Boolean
 }
 
-class DefaultStaticAssetsController(val resourceLoader: ResourceLoader = ResourceLoader()) : StaticAssetsController {
+class DefaultStaticAssetsController : StaticAssetsController {
 
     override fun serveStaticAsset(req: HttpServletRequest, resp: HttpServletResponse): Boolean {
         val path = req.getPathInfo()
         val resourceName = if (path.equals("/")) "index.html" else path.substring(1)
 
-        resourceLoader.load("/public/$resourceName")?.let { resourceStream ->
+        getResourceAsStream("/public/$resourceName")?.let {
             resp.setContentType(getContentType(resourceName))
-            writeResource(resp.getWriter(), resourceStream)
+            writeResource(resp.getWriter(), it)
             return true
         }
 

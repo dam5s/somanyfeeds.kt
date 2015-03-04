@@ -4,14 +4,14 @@ import org.mybatis.spring.mapper.MapperFactoryBean
 import org.mybatis.spring.SqlSessionFactoryBean
 import java.util.Properties
 import com.somanyfeeds.kotlinextensions.tap
+import com.somanyfeeds.kotlinextensions.getResourceAsStream
 
 class TestDatabaseConfig {
     val dataSource: DataSource = buildTestDataSource()
     val sqlSessionFactoryBean = SqlSessionFactoryBean().tap { it.setDataSource(dataSource) }
 
     private fun buildTestDataSource(): PGSimpleDataSource {
-        val propsInputStream = javaClass<Any>().getResourceAsStream("/connection.properties")
-        val props = Properties().tap { it.load(propsInputStream) }
+        val props = Properties().tap { it.load(getResourceAsStream("/connection.properties")) }
 
         return PGSimpleDataSource().tap {
             it.setUser(props.getProperty("test.user"))
