@@ -6,9 +6,14 @@ import javax.sql.DataSource
 import org.postgresql.ds.PGSimpleDataSource
 import org.mybatis.spring.SqlSessionFactoryBean
 import org.mybatis.spring.mapper.MapperFactoryBean
-import com.somanyfeeds.aggregator.PostgresArticleDataGateway
+import com.somanyfeeds.aggregator.PostgresArticlesDataGateway
 import com.somanyfeeds.aggregator.ArticleDataMapper
 import com.somanyfeeds.kotlinextensions.tap
+import com.somanyfeeds.aggregator.FeedUpdatesScheduler
+import com.somanyfeeds.aggregator.DefaultFeedUpdatesScheduler
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledThreadPoolExecutor
+import com.somanyfeeds.aggregator.FeedsUpdater
 
 object ServiceLocator {
     val dataSource: DataSource = PGSimpleDataSource().tap {
@@ -24,13 +29,21 @@ object ServiceLocator {
 
     val staticAssetsController = DefaultStaticAssetsController()
     val articleDataMapper = buildDataMapper(javaClass<ArticleDataMapper>())
-    val articleDataGateway = PostgresArticleDataGateway(articleDataMapper = articleDataMapper);
-    val articlesController = DefaultArticlesController(articleDataGateway = articleDataGateway)
+    val articlesDataGateway = PostgresArticlesDataGateway(articleDataMapper = articleDataMapper);
+    val articlesController = DefaultArticlesController(articlesDataGateway = articlesDataGateway)
+
+    val scheduledExecutorService: ScheduledExecutorService = ScheduledThreadPoolExecutor(2)
+    val feedsUpdater = FeedsUpdater(, fakeFeedProcessors)
+    val feedUpdatesScheduler = DefaultFeedUpdatesScheduler(
+        scheduledExecutorService = scheduledExecutorService,
+        feedsUpdater = feedsUpdater
+    )
 
     fun staticAssetsController(): StaticAssetsController = staticAssetsController
 
     fun articlesController(): ArticlesController = articlesController
 
+    fun feedUpdatesScheduler(): FeedUpdatesScheduler = feedUpdatesScheduler
 
     private fun buildDataMapper<T>(klass: Class<T>): T {
         val sqlSessionFactory = sqlSessionFactoryBean.getObject().tap {

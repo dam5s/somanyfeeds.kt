@@ -1,6 +1,6 @@
 import org.jetbrains.spek.api.Spek
 import com.somanyfeeds.aggregator.DefaultArticlesController
-import com.somanyfeeds.aggregator.ArticleDataGateway
+import com.somanyfeeds.aggregator.ArticlesDataGateway
 import kotlin.test.assertEquals
 import com.somanyfeeds.aggregator.Article
 import java.time.ZonedDateTime
@@ -22,7 +22,7 @@ class ArticlesControllerSpec : Spek() {{
                 date = ZonedDateTime.parse("2011-01-30T02:03:04Z")
             )
         ))
-        val controller = DefaultArticlesController(articleDataGateway = fakeDataGateway)
+        val controller = DefaultArticlesController(articlesDataGateway = fakeDataGateway)
         val objectMapper = ObjectMapperProvider().get()
 
 
@@ -55,6 +55,6 @@ class ArticlesControllerSpec : Spek() {{
     }
 }}
 
-class FakeArticleDataGateway(val articles: List<Article> = emptyList()) : ArticleDataGateway {
+class FakeArticleDataGateway(val articles: List<Article> = emptyList()) : ArticlesDataGateway {
     override fun selectArticles(): List<Article> = articles
 }

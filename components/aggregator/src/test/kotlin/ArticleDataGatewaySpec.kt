@@ -1,5 +1,5 @@
 import org.jetbrains.spek.api.Spek
-import com.somanyfeeds.aggregator.PostgresArticleDataGateway
+import com.somanyfeeds.aggregator.PostgresArticlesDataGateway
 import kotlin.test.assertEquals
 import com.somanyfeeds.aggregator.Article
 import java.time.ZonedDateTime
@@ -8,7 +8,7 @@ import com.somanyfeeds.aggregator.ArticleDataMapper
 class ArticleDataGatewaySpec : Spek() {{
     val dbConfig = TestDatabaseConfig()
     val dataMapper = dbConfig.buildTestDataMapper(javaClass<ArticleDataMapper>())
-    val dataGateway = PostgresArticleDataGateway(articleDataMapper = dataMapper)
+    val dataGateway = PostgresArticlesDataGateway(articleDataMapper = dataMapper)
 
     given("some articles in the database") {
         dbConfig.executeSql("delete from article")

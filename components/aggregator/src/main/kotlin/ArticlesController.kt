@@ -8,7 +8,7 @@ public trait ArticlesController {
     public fun listArticles(req: HttpServletRequest, resp: HttpServletResponse)
 }
 
-class DefaultArticlesController(val articleDataGateway: ArticleDataGateway) : ArticlesController {
+class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : ArticlesController {
     val objectMapper = ObjectMapperProvider().get()
 
     override fun listArticles(req: HttpServletRequest, resp: HttpServletResponse) {
@@ -16,7 +16,7 @@ class DefaultArticlesController(val articleDataGateway: ArticleDataGateway) : Ar
 
         objectMapper.writeValue(
             resp.getWriter(),
-            articleDataGateway.selectArticles()
+            articlesDataGateway.selectArticles()
         )
     }
 }
