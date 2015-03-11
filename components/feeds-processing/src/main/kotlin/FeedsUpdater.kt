@@ -1,8 +1,9 @@
-package com.somanyfeeds.aggregator
+package com.somanyfeeds.feedsprocessing
 
-import com.somanyeeds.aggregator.FeedsDataGateway
-import com.somanyeeds.aggregator.FeedType
-import com.somanyeeds.aggregator.FeedProcessor
+import com.somanyeeds.feedsdataaccess.FeedsDataGateway
+import com.somanyeeds.feedsdataaccess.FeedType
+import com.somanyeeds.feedsprocessing.FeedProcessor
+
 
 class FeedsUpdater(
     val feedsDataGateway: FeedsDataGateway,

@@ -1,4 +1,4 @@
-package com.somanyfeeds.aggregator
+package com.somanyfeeds.articlesdataaccess
 
 import java.time.ZonedDateTime
 

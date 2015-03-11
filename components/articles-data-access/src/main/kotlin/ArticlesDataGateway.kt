@@ -1,14 +1,14 @@
-package com.somanyfeeds.aggregator
+package com.somanyfeeds.articlesdataaccess
 
-import org.apache.ibatis.annotations.Select
 import java.sql.Timestamp
 import com.somanyfeeds.kotlinextensions.toUtcZonedDateTime
+import org.apache.ibatis.annotations.Select
 
-public trait ArticleDataGateway {
+public trait ArticlesDataGateway {
     fun selectArticles(): List<Article>;
 }
 
-class PostgresArticleDataGateway(val articleDataMapper: ArticleDataMapper) : ArticleDataGateway {
+class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper) : ArticlesDataGateway {
     override fun selectArticles(): List<Article> =
         articleDataMapper.selectArticles().map { it.buildArticle() }
 }
@@ -18,7 +18,7 @@ trait ArticleDataMapper {
     fun selectArticles(): List<ArticleMapping>
 }
 
-class ArticleMapping {
+private class ArticleMapping {
     var id: Long = 0
     var title = ""
     var link = ""

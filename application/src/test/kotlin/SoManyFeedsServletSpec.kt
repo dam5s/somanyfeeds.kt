@@ -2,7 +2,7 @@ import org.jetbrains.spek.api.Spek
 import com.somanyfeeds.application.SoManyFeedsServlet
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import com.somanyfeeds.aggregator.FeedUpdatesScheduler
+import com.somanyfeeds.feedsprocessing.FeedUpdatesScheduler
 
 class SoManyFeedsServletSpec : Spek() {{
     given("a SoManyFeedsServlet") {

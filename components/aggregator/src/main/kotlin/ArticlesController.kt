@@ -3,6 +3,7 @@ package com.somanyfeeds.aggregator
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import com.somanyfeeds.jsonserialization.ObjectMapperProvider
+import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
 
 public trait ArticlesController {
     public fun listArticles(req: HttpServletRequest, resp: HttpServletResponse)

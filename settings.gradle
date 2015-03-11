@@ -2,6 +2,10 @@ rootProject.name="somanyfeeds.kt"
 
 include "application"
 include "components/aggregator"
+include "components/articles-data-access"
+include "components/feeds-data-access"
+include "components/feeds-processing"
+
 include "components/json-serialization"
 
 include "components/http-servlet-testing"

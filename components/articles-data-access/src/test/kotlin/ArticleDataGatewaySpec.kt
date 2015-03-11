@@ -1,9 +1,9 @@
 import org.jetbrains.spek.api.Spek
-import com.somanyfeeds.aggregator.PostgresArticlesDataGateway
 import kotlin.test.assertEquals
-import com.somanyfeeds.aggregator.Article
 import java.time.ZonedDateTime
-import com.somanyfeeds.aggregator.ArticleDataMapper
+import com.somanyfeeds.articlesdataaccess.ArticleDataMapper
+import com.somanyfeeds.articlesdataaccess.PostgresArticlesDataGateway
+import com.somanyfeeds.articlesdataaccess.Article
 
 class ArticleDataGatewaySpec : Spek() {{
     val dbConfig = TestDatabaseConfig()

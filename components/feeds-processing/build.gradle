@@ -1,0 +1,4 @@
+dependencies {
+    compile project(":components/feeds-data-access")
+    compile project(":components/articles-data-access")
+}

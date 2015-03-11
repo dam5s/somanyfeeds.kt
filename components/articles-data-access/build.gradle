@@ -1,0 +1,5 @@
+dependencies {
+    compile "org.mybatis:mybatis:$myBatisVersion"
+
+    testCompile project(":components/database-testing")
+}

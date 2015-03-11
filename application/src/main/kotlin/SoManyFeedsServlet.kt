@@ -3,7 +3,7 @@ package com.somanyfeeds.application
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.*
 import com.somanyfeeds.aggregator.ArticlesController
-import com.somanyfeeds.aggregator.FeedUpdatesScheduler
+import com.somanyfeeds.feedsprocessing.FeedUpdatesScheduler
 
 WebServlet(name = "SoManyFeeds", value = array("/*"))
 public class SoManyFeedsServlet(

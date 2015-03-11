@@ -6,14 +6,19 @@ import javax.sql.DataSource
 import org.postgresql.ds.PGSimpleDataSource
 import org.mybatis.spring.SqlSessionFactoryBean
 import org.mybatis.spring.mapper.MapperFactoryBean
-import com.somanyfeeds.aggregator.PostgresArticlesDataGateway
-import com.somanyfeeds.aggregator.ArticleDataMapper
 import com.somanyfeeds.kotlinextensions.tap
-import com.somanyfeeds.aggregator.FeedUpdatesScheduler
-import com.somanyfeeds.aggregator.DefaultFeedUpdatesScheduler
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledThreadPoolExecutor
-import com.somanyfeeds.aggregator.FeedsUpdater
+import com.somanyfeeds.articlesdataaccess.ArticleDataMapper
+import com.somanyfeeds.articlesdataaccess.PostgresArticlesDataGateway
+import com.somanyeeds.feedsdataaccess.PostgresFeedsDataGateway
+import com.somanyeeds.feedsdataaccess.FeedDataMapper
+import com.somanyeeds.feedsdataaccess.FeedType
+import com.somanyfeeds.feedsprocessing.AtomFeedProcessor
+import com.somanyfeeds.feedsprocessing.FeedsUpdater
+import com.somanyfeeds.feedsprocessing.RssFeedProcessor
+import com.somanyfeeds.feedsprocessing.DefaultFeedUpdatesScheduler
+import com.somanyfeeds.feedsprocessing.FeedUpdatesScheduler
 
 object ServiceLocator {
     val dataSource: DataSource = PGSimpleDataSource().tap {
@@ -33,16 +38,24 @@ object ServiceLocator {
     val articlesController = DefaultArticlesController(articlesDataGateway = articlesDataGateway)
 
     val scheduledExecutorService: ScheduledExecutorService = ScheduledThreadPoolExecutor(2)
-    val feedsUpdater = FeedsUpdater(, fakeFeedProcessors)
+
+    val feedDataMapper = buildDataMapper(javaClass<FeedDataMapper>())
+    val feedsDataGateway = PostgresFeedsDataGateway(feedDataMapper = feedDataMapper)
+
+    val feedsUpdater = FeedsUpdater(
+        feedsDataGateway = feedsDataGateway,
+        feedProcessors = mapOf(
+            FeedType.RSS to RssFeedProcessor(),
+            FeedType.RSS to AtomFeedProcessor()
+        )
+    )
     val feedUpdatesScheduler = DefaultFeedUpdatesScheduler(
         scheduledExecutorService = scheduledExecutorService,
         feedsUpdater = feedsUpdater
     )
 
     fun staticAssetsController(): StaticAssetsController = staticAssetsController
-
     fun articlesController(): ArticlesController = articlesController
-
     fun feedUpdatesScheduler(): FeedUpdatesScheduler = feedUpdatesScheduler
 
     private fun buildDataMapper<T>(klass: Class<T>): T {

@@ -1,10 +1,10 @@
 import org.jetbrains.spek.api.Spek
 import com.somanyfeeds.aggregator.DefaultArticlesController
-import com.somanyfeeds.aggregator.ArticlesDataGateway
 import kotlin.test.assertEquals
-import com.somanyfeeds.aggregator.Article
 import java.time.ZonedDateTime
 import com.somanyfeeds.jsonserialization.ObjectMapperProvider
+import com.somanyfeeds.articlesdataaccess.Article
+import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
 
 class ArticlesControllerSpec : Spek() {{
     given("an ArticlesController and some articles available") {

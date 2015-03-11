@@ -1,7 +1,7 @@
-package com.somanyfeeds.aggregator
+package com.somanyfeeds.feedsprocessing
 
-import com.somanyeeds.aggregator.FeedProcessor
-import com.somanyeeds.aggregator.Feed
+import com.somanyeeds.feedsdataaccess.Feed
+import com.somanyeeds.feedsprocessing.FeedProcessor
 
 class AtomFeedProcessor : FeedProcessor {
     override fun process(feed: Feed) {

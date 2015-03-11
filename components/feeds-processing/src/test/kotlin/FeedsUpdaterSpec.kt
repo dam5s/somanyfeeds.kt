@@ -1,10 +1,10 @@
 import org.jetbrains.spek.api.Spek
-import com.somanyfeeds.aggregator.FeedsUpdater
-import com.somanyeeds.aggregator.FeedsDataGateway
-import com.somanyeeds.aggregator.Feed
-import com.somanyeeds.aggregator.FeedType
-import com.somanyeeds.aggregator.FeedProcessor
 import kotlin.test.assertEquals
+import com.somanyeeds.feedsdataaccess.Feed
+import com.somanyeeds.feedsdataaccess.FeedType
+import com.somanyeeds.feedsprocessing.FeedProcessor
+import com.somanyfeeds.feedsprocessing.FeedsUpdater
+import com.somanyeeds.feedsdataaccess.FeedsDataGateway
 
 class FeedsUpdaterSpec : Spek() {{
     given("a FeedsUpdater and some feeds") {

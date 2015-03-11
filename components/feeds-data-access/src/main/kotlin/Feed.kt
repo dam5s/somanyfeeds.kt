@@ -1,4 +1,4 @@
-package com.somanyeeds.aggregator
+package com.somanyeeds.feedsdataaccess
 
 data class Feed(
     val id: Long? = 0,
