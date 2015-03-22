@@ -6,7 +6,7 @@ import com.somanyfeeds.jsonserialization.ObjectMapperProvider
 import com.somanyfeeds.articlesdataaccess.Article
 import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
 
-class ArticlesControllerSpec : Spek() {{
+class ArticlesControllerSpec : Spek() { init {
     given("an ArticlesController and some articles available") {
         val fakeDataGateway = FakeArticleDataGateway(articles = listOf(
             Article(

@@ -4,7 +4,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import com.somanyfeeds.feedsprocessing.FeedUpdatesScheduler
 
-class SoManyFeedsServletSpec : Spek() {{
+class SoManyFeedsServletSpec : Spek() { init {
     given("a SoManyFeedsServlet") {
         val fakeScheduler = FakeFeedUpdatesScheduler()
         val servlet = SoManyFeedsServlet(feedUpdatesScheduler = fakeScheduler)

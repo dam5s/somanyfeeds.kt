@@ -6,7 +6,7 @@ import com.somanyeeds.feedsprocessing.FeedProcessor
 import com.somanyfeeds.feedsprocessing.FeedsUpdater
 import com.somanyeeds.feedsdataaccess.FeedsDataGateway
 
-class FeedsUpdaterSpec : Spek() {{
+class FeedsUpdaterSpec : Spek() { init {
     given("a FeedsUpdater and some feeds") {
         val rssFeed = Feed(
             name = "G+",

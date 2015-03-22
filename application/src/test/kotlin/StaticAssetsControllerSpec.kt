@@ -5,7 +5,7 @@ import com.somanyfeeds.application.DefaultStaticAssetsController
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 
-class StaticAssetsControllerSpec : Spek() {{
+class StaticAssetsControllerSpec : Spek() { init {
     given("a static assets controller", {
         val controller = DefaultStaticAssetsController()
 

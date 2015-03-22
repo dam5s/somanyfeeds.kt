@@ -5,7 +5,7 @@ import com.somanyeeds.feedsdataaccess.Feed
 import com.somanyeeds.feedsdataaccess.PostgresFeedsDataGateway
 import com.somanyeeds.feedsdataaccess.FeedDataMapper
 
-class FeedsDataGatewaySpec : Spek() {{
+class FeedsDataGatewaySpec : Spek() { init {
     val dbConfig = TestDatabaseConfig()
     val dataMapper = dbConfig.buildTestDataMapper(javaClass<FeedDataMapper>())
     val dataGateway = PostgresFeedsDataGateway(dataMapper)

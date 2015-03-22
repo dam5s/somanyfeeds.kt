@@ -12,7 +12,7 @@ public class SoManyFeedsServlet(
     val feedUpdatesScheduler: FeedUpdatesScheduler = ServiceLocator.feedUpdatesScheduler()
 ) : HttpServlet() {
 
-    {
+    init {
         feedUpdatesScheduler.start()
     }
 

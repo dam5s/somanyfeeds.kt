@@ -5,7 +5,7 @@ import com.somanyfeeds.articlesdataaccess.ArticleDataMapper
 import com.somanyfeeds.articlesdataaccess.PostgresArticlesDataGateway
 import com.somanyfeeds.articlesdataaccess.Article
 
-class ArticleDataGatewaySpec : Spek() {{
+class ArticleDataGatewaySpec : Spek() { init {
     val dbConfig = TestDatabaseConfig()
     val dataMapper = dbConfig.buildTestDataMapper(javaClass<ArticleDataMapper>())
     val dataGateway = PostgresArticlesDataGateway(articleDataMapper = dataMapper)
