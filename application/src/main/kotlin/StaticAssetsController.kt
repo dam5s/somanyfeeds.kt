@@ -9,10 +9,16 @@ import java.io.InputStreamReader
 import com.somanyfeeds.kotlinextensions.getResourceAsStream
 
 trait StaticAssetsController {
+    fun canServe(req: HttpServletRequest): Boolean
     fun serveStaticAsset(req: HttpServletRequest, resp: HttpServletResponse): Boolean
 }
 
 class DefaultStaticAssetsController : StaticAssetsController {
+
+    override fun canServe(req: HttpServletRequest): Boolean {
+        val path = req.getPathInfo()
+        return path.endsWith(".css") || path.endsWith(".html") || path.endsWith(".js") || path.endsWith(".dart")
+    }
 
     override fun serveStaticAsset(req: HttpServletRequest, resp: HttpServletResponse): Boolean {
         val path = req.getPathInfo()

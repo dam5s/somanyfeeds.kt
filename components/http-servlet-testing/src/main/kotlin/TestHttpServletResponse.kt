@@ -9,6 +9,7 @@ class TestHttpServletResponse() : HttpServletResponse {
     val stringWriter: StringWriter = StringWriter()
     val internalPrintWriter: PrintWriter = PrintWriter(stringWriter)
     val headers: MutableMap<String, String> = hashMapOf()
+    var fakeStatus: Int = 200;
 
     fun getBody(): String {
         return stringWriter.toString()
@@ -137,20 +138,16 @@ class TestHttpServletResponse() : HttpServletResponse {
     }
 
     override fun setStatus(sc: Int) {
-        throw UnsupportedOperationException()
+        fakeStatus = sc
     }
 
     override fun setStatus(sc: Int, sm: String?) {
         throw UnsupportedOperationException()
     }
 
-    override fun getStatus(): Int {
-        throw UnsupportedOperationException()
-    }
+    override fun getStatus(): Int = fakeStatus
 
-    override fun getHeader(name: String?): String? {
-        return headers[name]
-    }
+    override fun getHeader(name: String?): String? = headers[name]
 
     override fun getHeaders(name: String?): MutableCollection<String>? {
         throw UnsupportedOperationException()
