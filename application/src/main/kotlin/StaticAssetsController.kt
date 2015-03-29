@@ -10,27 +10,31 @@ import com.somanyfeeds.kotlinextensions.getResourceAsStream
 
 trait StaticAssetsController {
     fun canServe(req: HttpServletRequest): Boolean
-    fun serveStaticAsset(req: HttpServletRequest, resp: HttpServletResponse): Boolean
+    fun serveStaticAsset(req: HttpServletRequest, resp: HttpServletResponse)
 }
 
 class DefaultStaticAssetsController : StaticAssetsController {
 
     override fun canServe(req: HttpServletRequest): Boolean {
         val path = req.getPathInfo()
-        return path.endsWith(".css") || path.endsWith(".html") || path.endsWith(".js") || path.endsWith(".dart")
+        return path.equals("/")
+            || path.endsWith(".css")
+            || path.endsWith(".html")
+            || path.endsWith(".js")
+            || path.endsWith(".dart")
     }
 
-    override fun serveStaticAsset(req: HttpServletRequest, resp: HttpServletResponse): Boolean {
+    override fun serveStaticAsset(req: HttpServletRequest, resp: HttpServletResponse) {
         val path = req.getPathInfo()
         val resourceName = if (path.equals("/")) "index.html" else path.substring(1)
 
         getResourceAsStream("/public/$resourceName")?.let {
             resp.setContentType(getContentType(resourceName))
             writeResource(resp.getWriter(), it)
-            return true
+            return
         }
 
-        return false
+        resp.setStatus(404)
     }
 
     private fun writeResource(writer: PrintWriter, resourceStream: InputStream) {
