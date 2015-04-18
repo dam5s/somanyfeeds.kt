@@ -19,8 +19,8 @@ public class SoManyFeedsServlet(
     init {
         feedUpdatesScheduler.start()
 
-        router.map({req -> staticAssetsController.canServe(req)}, {req, resp -> staticAssetsController.serveStaticAsset(req, resp)})
-        router.map({req -> true}, {req, resp -> articlesController.listArticles(req, resp)})
+        router.map({ req -> staticAssetsController.canServe(req) }, { req, resp -> staticAssetsController.serveStaticAsset(req, resp) })
+        router.map({ req -> true }, { req, resp -> articlesController.listArticles(req, resp) })
     }
 
     override fun destroy() {

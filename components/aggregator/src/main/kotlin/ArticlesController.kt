@@ -15,9 +15,8 @@ class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : 
     override fun listArticles(req: HttpServletRequest, resp: HttpServletResponse) {
         resp.setContentType("application/json")
 
-        objectMapper.writeValue(
-            resp.getWriter(),
-            articlesDataGateway.selectArticles()
-        )
+        val articles = articlesDataGateway.selectArticles()
+
+        objectMapper.writeValue(resp.getWriter(), articles)
     }
 }
