@@ -1,7 +1,7 @@
 package com.somanyfeeds.feedsprocessing
 
-import com.somanyeeds.feedsprocessing.FeedProcessor
-import com.somanyeeds.feedsdataaccess.Feed
+import com.somanyfeeds.feedsprocessing.FeedProcessor
+import com.somanyfeeds.feedsdataaccess.Feed
 
 
 class RssFeedProcessor : FeedProcessor {

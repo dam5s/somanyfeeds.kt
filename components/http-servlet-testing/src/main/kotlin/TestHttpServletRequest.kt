@@ -18,7 +18,8 @@ import javax.servlet.http.HttpUpgradeHandler
 
 class TestHttpServletRequest(
     val path: String = "/",
-    val headers: Map<String, List<String>> = emptyMap()
+    val headers: Map<String, List<String>> = emptyMap(),
+    val httpMethod: String = "GET"
 ) : HttpServletRequest {
 
     override fun getAttribute(name: String?): Any? {
@@ -195,13 +196,9 @@ class TestHttpServletRequest(
         throw UnsupportedOperationException()
     }
 
-    override fun getMethod(): String? {
-        throw UnsupportedOperationException()
-    }
+    override fun getMethod(): String? = httpMethod
 
-    override fun getPathInfo(): String? {
-        return path
-    }
+    override fun getPathInfo(): String? = path
 
     override fun getPathTranslated(): String? {
         throw UnsupportedOperationException()

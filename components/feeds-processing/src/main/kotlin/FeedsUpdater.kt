@@ -1,8 +1,8 @@
 package com.somanyfeeds.feedsprocessing
 
-import com.somanyeeds.feedsdataaccess.FeedsDataGateway
-import com.somanyeeds.feedsdataaccess.FeedType
-import com.somanyeeds.feedsprocessing.FeedProcessor
+import com.somanyfeeds.feedsdataaccess.FeedsDataGateway
+import com.somanyfeeds.feedsdataaccess.FeedType
+import com.somanyfeeds.feedsprocessing.FeedProcessor
 
 
 class FeedsUpdater(

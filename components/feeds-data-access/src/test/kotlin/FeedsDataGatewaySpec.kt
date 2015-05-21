@@ -1,9 +1,9 @@
 import org.jetbrains.spek.api.Spek
 import kotlin.test.assertEquals
-import com.somanyeeds.feedsdataaccess.FeedType
-import com.somanyeeds.feedsdataaccess.Feed
-import com.somanyeeds.feedsdataaccess.PostgresFeedsDataGateway
-import com.somanyeeds.feedsdataaccess.FeedDataMapper
+import com.somanyfeeds.feedsdataaccess.FeedType
+import com.somanyfeeds.feedsdataaccess.Feed
+import com.somanyfeeds.feedsdataaccess.PostgresFeedsDataGateway
+import com.somanyfeeds.feedsdataaccess.FeedDataMapper
 
 class FeedsDataGatewaySpec : Spek() { init {
     val dbConfig = TestDatabaseConfig()

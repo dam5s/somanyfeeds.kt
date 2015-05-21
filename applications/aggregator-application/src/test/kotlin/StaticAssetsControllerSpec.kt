@@ -1,9 +1,11 @@
-import kotlin.test.assertTrue
-import kotlin.test.assertEquals
+import TestHttpServletRequest
+import TestHttpServletResponse
+import com.somanyfeeds.frontend.DefaultStaticAssetsController
 import org.jetbrains.spek.api.Spek
-import com.somanyfeeds.application.DefaultStaticAssetsController
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class StaticAssetsControllerSpec : Spek() { init {
     val controller = DefaultStaticAssetsController()
@@ -24,7 +26,7 @@ class StaticAssetsControllerSpec : Spek() { init {
             controller.serveStaticAsset(homePageReq, homePageResp)
 
             it("renders index.html page") {
-                assertTrue(homePageResp.getBody().contains("<h1>damo.io</h1>"))
+                assertTrue(homePageResp.getBody().contains("<h1>Hello World</h1>"))
             }
             it("sets the content-type") {
                 assertEquals("text/html", homePageResp.getContentType())

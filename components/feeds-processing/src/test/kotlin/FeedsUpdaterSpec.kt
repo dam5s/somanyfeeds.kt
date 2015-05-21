@@ -1,10 +1,10 @@
 import org.jetbrains.spek.api.Spek
 import kotlin.test.assertEquals
-import com.somanyeeds.feedsdataaccess.Feed
-import com.somanyeeds.feedsdataaccess.FeedType
-import com.somanyeeds.feedsprocessing.FeedProcessor
+import com.somanyfeeds.feedsdataaccess.Feed
+import com.somanyfeeds.feedsdataaccess.FeedType
+import com.somanyfeeds.feedsprocessing.FeedProcessor
 import com.somanyfeeds.feedsprocessing.FeedsUpdater
-import com.somanyeeds.feedsdataaccess.FeedsDataGateway
+import com.somanyfeeds.feedsdataaccess.FeedsDataGateway
 
 class FeedsUpdaterSpec : Spek() { init {
     given("a FeedsUpdater and some feeds") {

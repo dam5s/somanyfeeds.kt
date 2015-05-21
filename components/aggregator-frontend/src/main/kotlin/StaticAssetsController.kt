@@ -1,4 +1,4 @@
-package com.somanyfeeds.application
+package com.somanyfeeds.frontend
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -27,8 +27,9 @@ class DefaultStaticAssetsController : StaticAssetsController {
     override fun serveStaticAsset(req: HttpServletRequest, resp: HttpServletResponse) {
         val path = req.getPathInfo()
         val resourceName = if (path.equals("/")) "index.html" else path.substring(1)
+        val clazz = javaClass<StaticAssetsController>()
 
-        getResourceAsStream("/public/$resourceName")?.let {
+        clazz.getResourceAsStream("/public/$resourceName")?.let {
             resp.setContentType(getContentType(resourceName))
             writeResource(resp.getWriter(), it)
             return

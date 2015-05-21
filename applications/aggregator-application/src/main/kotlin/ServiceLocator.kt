@@ -2,23 +2,21 @@ package com.somanyfeeds.application
 
 import com.somanyfeeds.aggregator.ArticlesController
 import com.somanyfeeds.aggregator.DefaultArticlesController
-import javax.sql.DataSource
-import org.postgresql.ds.PGSimpleDataSource
-import org.mybatis.spring.SqlSessionFactoryBean
-import org.mybatis.spring.mapper.MapperFactoryBean
-import com.somanyfeeds.kotlinextensions.tap
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.ScheduledThreadPoolExecutor
 import com.somanyfeeds.articlesdataaccess.ArticleDataMapper
 import com.somanyfeeds.articlesdataaccess.PostgresArticlesDataGateway
-import com.somanyeeds.feedsdataaccess.PostgresFeedsDataGateway
-import com.somanyeeds.feedsdataaccess.FeedDataMapper
-import com.somanyeeds.feedsdataaccess.FeedType
-import com.somanyfeeds.feedsprocessing.AtomFeedProcessor
-import com.somanyfeeds.feedsprocessing.FeedsUpdater
-import com.somanyfeeds.feedsprocessing.RssFeedProcessor
-import com.somanyfeeds.feedsprocessing.DefaultFeedUpdatesScheduler
-import com.somanyfeeds.feedsprocessing.FeedUpdatesScheduler
+import com.somanyfeeds.feedsdataaccess.FeedDataMapper
+import com.somanyfeeds.feedsdataaccess.FeedType
+import com.somanyfeeds.feedsdataaccess.PostgresFeedsDataGateway
+import com.somanyfeeds.feedsprocessing.*
+import com.somanyfeeds.frontend.DefaultStaticAssetsController
+import com.somanyfeeds.frontend.StaticAssetsController
+import com.somanyfeeds.kotlinextensions.tap
+import org.mybatis.spring.SqlSessionFactoryBean
+import org.mybatis.spring.mapper.MapperFactoryBean
+import org.postgresql.ds.PGSimpleDataSource
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledThreadPoolExecutor
+import javax.sql.DataSource
 
 object ServiceLocator {
     val dataSource: DataSource = PGSimpleDataSource().tap {

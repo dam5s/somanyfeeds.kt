@@ -1,7 +1,8 @@
 apply plugin: "war"
 
 dependencies {
-    compile project(":components/aggregator")
+    compile project(":components/aggregator-api")
+    compile project(":components/aggregator-frontend")
     compile project(":components/articles-data-access")
     compile project(":components/feeds-data-access")
     compile project(":components/feeds-processing")

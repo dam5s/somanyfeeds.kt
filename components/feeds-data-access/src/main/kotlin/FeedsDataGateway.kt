@@ -1,4 +1,4 @@
-package com.somanyeeds.feedsdataaccess
+package com.somanyfeeds.feedsdataaccess
 
 import org.apache.ibatis.annotations.Select
 

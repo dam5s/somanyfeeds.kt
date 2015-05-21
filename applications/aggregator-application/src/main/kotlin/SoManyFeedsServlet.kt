@@ -2,6 +2,7 @@ package com.somanyfeeds.application
 
 import com.somanyfeeds.aggregator.ArticlesController
 import com.somanyfeeds.feedsprocessing.FeedUpdatesScheduler
+import com.somanyfeeds.frontend.StaticAssetsController
 import java.util.ArrayList
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
@@ -29,6 +30,7 @@ public class SoManyFeedsServlet(
     }
 
     override public fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
+        if (req.getMethod() != "GET") { return }
         router.route(req, resp)
     }
 }

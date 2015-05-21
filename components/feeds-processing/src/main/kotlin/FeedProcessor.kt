@@ -1,6 +1,6 @@
-package com.somanyeeds.feedsprocessing
+package com.somanyfeeds.feedsprocessing
 
-import com.somanyeeds.feedsdataaccess.Feed
+import com.somanyfeeds.feedsdataaccess.Feed
 
 public trait FeedProcessor {
     fun process(feed: Feed)

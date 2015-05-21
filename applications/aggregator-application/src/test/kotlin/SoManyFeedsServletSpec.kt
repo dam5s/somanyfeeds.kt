@@ -60,11 +60,6 @@ class FakeFeedUpdatesScheduler : FeedUpdatesScheduler {
     var didStart = false
     var didStop = false
 
-    override fun start() {
-        didStart = true
-    }
-
-    override fun stop() {
-        didStop = true
-    }
+    override fun start() { didStart = true }
+    override fun stop() { didStop = true }
 }
