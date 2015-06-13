@@ -18,10 +18,15 @@ class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : 
         val articles = articlesDataGateway.selectArticles()
 
         when (expectedContentType(req)) {
-            ContentType.JSON -> objectMapper.writeValue(resp.getWriter(), articles)
-            else -> {
+            ContentType.JSON -> {
+                objectMapper.writeValue(resp.getWriter(), articles)
+            }
+            ContentType.HTML -> {
                 req.setAttribute("articles", articles)
                 req.getRequestDispatcher("/WEB-INF/articles.jsp").forward(req, resp)
+            }
+            ContentType.UNKNOWN -> {
+                resp.setStatus(406)
             }
         }
     }
