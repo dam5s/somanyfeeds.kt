@@ -1,9 +1,8 @@
 rootProject.name="somanyfeeds.kt"
 
-include "applications/aggregator-application"
+include "applications/somanyfeeds-application"
 
-include "components/aggregator-frontend"
-include "components/aggregator-api"
+include "components/aggregator"
 include "components/articles-data-access"
 include "components/feeds-data-access"
 include "components/feeds-processing"
