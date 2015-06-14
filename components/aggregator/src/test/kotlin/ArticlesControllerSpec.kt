@@ -1,10 +1,14 @@
-import org.jetbrains.spek.api.Spek
+import FakeArticleDataGateway
+import TestHttpServletRequest
+import TestHttpServletResponse
 import com.somanyfeeds.aggregator.DefaultArticlesController
-import kotlin.test.assertEquals
-import java.time.ZonedDateTime
-import com.somanyfeeds.jsonserialization.ObjectMapperProvider
 import com.somanyfeeds.articlesdataaccess.Article
 import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
+import com.somanyfeeds.feedsdataaccess.Feed
+import com.somanyfeeds.jsonserialization.ObjectMapperProvider
+import org.jetbrains.spek.api.Spek
+import java.time.ZonedDateTime
+import kotlin.test.assertEquals
 
 class ArticlesControllerSpec : Spek() { init {
     given("an ArticlesController and some articles available") {
@@ -27,7 +31,10 @@ class ArticlesControllerSpec : Spek() { init {
 
 
         on("GET /articles") {
-            val listArticlesReq = TestHttpServletRequest(path = "/articles")
+            val listArticlesReq = TestHttpServletRequest(
+                path = "/articles",
+                headers = mapOf("Accept" to listOf("application/json"))
+            )
             val listArticlesResp = TestHttpServletResponse()
 
             controller.listArticles(listArticlesReq, listArticlesResp)
@@ -56,5 +63,13 @@ class ArticlesControllerSpec : Spek() { init {
 }}
 
 class FakeArticleDataGateway(val articles: List<Article> = emptyList()) : ArticlesDataGateway {
-    override fun selectArticles(): List<Article> = articles
+    var createdArticle: Article? = null
+    var createdArticleForFeed: Feed? = null
+
+    override fun create(article: Article, feed: Feed) {
+        createdArticle = article
+        createdArticleForFeed = feed
+    }
+
+    override fun selectAll(): List<Article> = articles
 }

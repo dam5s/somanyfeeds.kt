@@ -1,19 +1,23 @@
 package com.somanyfeeds.feedsprocessing
 
-import com.somanyfeeds.feedsdataaccess.FeedsDataGateway
+import com.somanyfeeds.articlesdataaccess.Article
 import com.somanyfeeds.feedsdataaccess.FeedType
-import com.somanyfeeds.feedsprocessing.FeedProcessor
+import com.somanyfeeds.feedsdataaccess.FeedsDataGateway
+import java.util.ArrayList
 
 
 class FeedsUpdater(
     val feedsDataGateway: FeedsDataGateway,
+    val articlesUpdater: ArticlesUpdater,
     val feedProcessors: Map<FeedType, FeedProcessor>
 ) : Runnable {
 
     override fun run() {
         for (feed in feedsDataGateway.selectFeeds()) {
             val processor = feedProcessors.get(feed.type)
-            processor!!.process(feed)
+            val articles = processor!!.process(feed)
+
+            articlesUpdater.updateArticles(articles, feed)
         }
     }
 }

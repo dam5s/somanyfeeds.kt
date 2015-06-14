@@ -27,8 +27,8 @@ class SoManyFeedsServletSpec : Spek() { init {
             }
         }
 
-        on("articles request") {
-            val reqHeaders = mapOf("accept" to listOf("application/json"))
+        on("articles JSON request") {
+            val reqHeaders = mapOf("Accept" to listOf("application/json"))
             val articlesReq = TestHttpServletRequest(path = "/", headers = reqHeaders)
             val articlesResp = TestHttpServletResponse()
 

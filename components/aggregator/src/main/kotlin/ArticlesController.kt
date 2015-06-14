@@ -1,9 +1,10 @@
 package com.somanyfeeds.aggregator
 
+import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
+import com.somanyfeeds.jsonserialization.ObjectMapperProvider
+import java.util.Enumeration
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import com.somanyfeeds.jsonserialization.ObjectMapperProvider
-import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
 
 public trait ArticlesController {
     public fun listArticles(req: HttpServletRequest, resp: HttpServletResponse)
@@ -15,7 +16,7 @@ class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : 
     override fun listArticles(req: HttpServletRequest, resp: HttpServletResponse) {
         resp.setContentType("application/json")
 
-        val articles = articlesDataGateway.selectArticles()
+        val articles = articlesDataGateway.selectAll()
 
         when (expectedContentType(req)) {
             ContentType.JSON -> {
@@ -32,7 +33,9 @@ class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : 
     }
 
     private fun expectedContentType(req: HttpServletRequest) : ContentType {
-        for (accept in req.getHeaders("Accept")) {
+        val reqHeaders = req.getHeaders("Accept") as Enumeration<String>
+
+        for (accept in reqHeaders) {
             if (accept.contains("application/json")) {
                 return ContentType.JSON
             }

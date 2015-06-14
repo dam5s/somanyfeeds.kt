@@ -11,6 +11,7 @@ class FeedsDataGatewaySpec : Spek() { init {
     val dataGateway = PostgresFeedsDataGateway(dataMapper)
 
     given("some feeds in the database") {
+        dbConfig.executeSql("delete from article")
         dbConfig.executeSql("delete from feed")
         dbConfig.executeSql("""
             insert into feed (id, name, slug, url, type) values

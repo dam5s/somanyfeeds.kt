@@ -11,7 +11,7 @@ class TestDatabaseConfig {
     val sqlSessionFactoryBean = SqlSessionFactoryBean().tap { it.setDataSource(dataSource) }
 
     private fun buildTestDataSource(): PGSimpleDataSource {
-        val props = Properties().tap { it.load(getResourceAsStream("/connection.properties")) }
+        val props = Properties().tap { it.load(getResourceAsStream("connection.properties")) }
 
         return PGSimpleDataSource().tap {
             it.setUser(props.getProperty("test.user"))

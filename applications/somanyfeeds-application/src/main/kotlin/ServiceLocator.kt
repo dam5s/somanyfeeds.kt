@@ -7,8 +7,16 @@ import com.somanyfeeds.articlesdataaccess.PostgresArticlesDataGateway
 import com.somanyfeeds.feedsdataaccess.FeedDataMapper
 import com.somanyfeeds.feedsdataaccess.FeedType
 import com.somanyfeeds.feedsdataaccess.PostgresFeedsDataGateway
-import com.somanyfeeds.feedsprocessing.*
+import com.somanyfeeds.feedsprocessing.DefaultArticlesUpdater
+import com.somanyfeeds.feedsprocessing.DefaultFeedUpdatesScheduler
+import com.somanyfeeds.feedsprocessing.FeedUpdatesScheduler
+import com.somanyfeeds.feedsprocessing.FeedsUpdater
+import com.somanyfeeds.feedsprocessing.atom.AtomFeedProcessor
+import com.somanyfeeds.feedsprocessing.rss.RssFeedProcessor
+import com.somanyfeeds.httpgateway.HttpGateway
+import com.somanyfeeds.httpgateway.OkHttpGateway
 import com.somanyfeeds.kotlinextensions.tap
+import com.squareup.okhttp.OkHttpClient
 import org.mybatis.spring.SqlSessionFactoryBean
 import org.mybatis.spring.mapper.MapperFactoryBean
 import org.postgresql.ds.PGSimpleDataSource
@@ -37,12 +45,15 @@ object ServiceLocator {
     val feedDataMapper = buildDataMapper(javaClass<FeedDataMapper>())
     val feedsDataGateway = PostgresFeedsDataGateway(feedDataMapper = feedDataMapper)
 
+    val httpGateway: HttpGateway = OkHttpGateway(OkHttpClient())
+
     val feedsUpdater = FeedsUpdater(
         feedsDataGateway = feedsDataGateway,
         feedProcessors = mapOf(
-            FeedType.RSS to RssFeedProcessor(),
-            FeedType.RSS to AtomFeedProcessor()
-        )
+            FeedType.RSS to RssFeedProcessor(httpGateway),
+            FeedType.ATOM to AtomFeedProcessor(httpGateway)
+        ),
+        articlesUpdater = DefaultArticlesUpdater(articlesDataGateway)
     )
     val feedUpdatesScheduler = DefaultFeedUpdatesScheduler(
         scheduledExecutorService = scheduledExecutorService,

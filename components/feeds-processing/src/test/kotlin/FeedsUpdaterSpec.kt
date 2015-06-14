@@ -1,10 +1,17 @@
-import org.jetbrains.spek.api.Spek
-import kotlin.test.assertEquals
+import FakeArticlesUpdater
+import FakeFeedProcessor
+import FakeFeedsDataGateway
+import buildArticle
+import com.somanyfeeds.articlesdataaccess.Article
 import com.somanyfeeds.feedsdataaccess.Feed
 import com.somanyfeeds.feedsdataaccess.FeedType
+import com.somanyfeeds.feedsdataaccess.FeedsDataGateway
+import com.somanyfeeds.feedsprocessing.ArticlesUpdater
 import com.somanyfeeds.feedsprocessing.FeedProcessor
 import com.somanyfeeds.feedsprocessing.FeedsUpdater
-import com.somanyfeeds.feedsdataaccess.FeedsDataGateway
+import org.jetbrains.spek.api.Spek
+import java.time.ZonedDateTime
+import kotlin.test.assertEquals
 
 class FeedsUpdaterSpec : Spek() { init {
     given("a FeedsUpdater and some feeds") {
@@ -22,15 +29,22 @@ class FeedsUpdaterSpec : Spek() { init {
         )
 
         val fakeFeedsDataGateway = FakeFeedsDataGateway(listOf(rssFeed, atomFeed))
-        val fakeRssProcessor = FakeFeedProcessor()
-        val fakeAtomProcessor = FakeFeedProcessor()
+        val fakeRssProcessor = FakeFeedProcessor(listOf(
+            buildArticle(id = 101)
+        ))
+        val fakeAtomProcessor = FakeFeedProcessor(listOf(
+            buildArticle(id = 201),
+            buildArticle(id = 202)
+        ))
         val fakeFeedProcessors: Map<FeedType, FeedProcessor> = mapOf(
             FeedType.RSS to fakeRssProcessor,
             FeedType.ATOM to fakeAtomProcessor
         )
+        val fakeArticlesUpdater = FakeArticlesUpdater()
         val feedsUpdater = FeedsUpdater(
             feedsDataGateway = fakeFeedsDataGateway,
-            feedProcessors = fakeFeedProcessors
+            feedProcessors = fakeFeedProcessors,
+            articlesUpdater = fakeArticlesUpdater
         )
 
         on("run") {
@@ -45,17 +59,4 @@ class FeedsUpdaterSpec : Spek() { init {
             }
         }
     }
-}
-}
-
-class FakeFeedsDataGateway(val feeds: List<Feed>) : FeedsDataGateway {
-    override fun selectFeeds(): List<Feed> = feeds
-}
-
-class FakeFeedProcessor : FeedProcessor {
-    var processedFeed: Feed? = null
-
-    override fun process(feed: Feed) {
-        processedFeed = feed
-    }
-}
+}}

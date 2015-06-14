@@ -1,20 +1,10 @@
-import javax.servlet.http.HttpServletRequest
-import java.util.Enumeration
-import javax.servlet.ServletInputStream
 import java.io.BufferedReader
-import java.util.Locale
-import javax.servlet.RequestDispatcher
-import javax.servlet.ServletContext
-import javax.servlet.AsyncContext
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
-import javax.servlet.DispatcherType
-import javax.servlet.http.Cookie
 import java.security.Principal
-import javax.servlet.http.HttpSession
-import javax.servlet.http.HttpServletResponse
-import javax.servlet.http.Part
-import javax.servlet.http.HttpUpgradeHandler
+import java.util.Enumeration
+import java.util.Locale
+import java.util.Vector
+import javax.servlet.*
+import javax.servlet.http.*
 
 class TestHttpServletRequest(
     val path: String = "/",
@@ -184,9 +174,7 @@ class TestHttpServletRequest(
 
     override fun getHeader(name: String?): String? = headers.get(name)?.get(0)
 
-    override fun getHeaders(name: String?): Enumeration<String>? {
-        throw UnsupportedOperationException()
-    }
+    override fun getHeaders(name: String?): Enumeration<String>? = Vector(headers.get(name) ?: emptyList()).elements()
 
     override fun getHeaderNames(): Enumeration<String>? {
         throw UnsupportedOperationException()

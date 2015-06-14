@@ -1,7 +1,7 @@
 package com.somanyfeeds.feedsdataaccess
 
 data class Feed(
-    val id: Long? = 0,
+    val id: Long? = null,
     val name: String,
     val slug: String,
     val url: String,
