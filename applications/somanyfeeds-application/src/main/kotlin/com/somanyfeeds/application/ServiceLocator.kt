@@ -26,14 +26,14 @@ import javax.sql.DataSource
 
 object ServiceLocator {
     val dataSource: DataSource = PGSimpleDataSource().tap {
-        it.setUser("dam5s")
-        it.setServerName("localhost")
-        it.setPortNumber(5432)
-        it.setDatabaseName("somanyfeeds_dev")
+        setUser("dam5s")
+        setServerName("localhost")
+        setPortNumber(5432)
+        setDatabaseName("somanyfeeds_dev")
     }
 
     val sqlSessionFactoryBean = SqlSessionFactoryBean().tap {
-        it.setDataSource(dataSource)
+        setDataSource(dataSource)
     }
 
     val articleDataMapper = buildDataMapper(javaClass<ArticleDataMapper>())
@@ -65,7 +65,7 @@ object ServiceLocator {
 
     private fun buildDataMapper<T>(klass: Class<T>): T {
         val sqlSessionFactory = sqlSessionFactoryBean.getObject().tap {
-            it.getConfiguration().addMapper(klass)
+            getConfiguration().addMapper(klass)
         }
 
         return MapperFactoryBean<T>().let { dataMapperFactory ->

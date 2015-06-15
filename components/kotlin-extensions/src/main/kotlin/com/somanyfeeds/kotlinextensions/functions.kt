@@ -7,12 +7,12 @@ import java.time.ZonedDateTime
 import java.util.Scanner
 
 // Invoke given function with caller as argument, then returns caller
-public inline fun <T : Any, R> T.tap(f: (T) -> R): T {
-    f(this)
+public inline fun <T : Any, R> T.tap(f: T.() -> R): T {
+    this.f()
     return this
 }
 
-public fun Any.getResourceAsStream(path: String): InputStream? {
+public fun getResourceAsStream(path: String): InputStream? {
     val classLoader = Thread.currentThread().getContextClassLoader()
     return classLoader.getResourceAsStream(path)
 }

@@ -19,8 +19,8 @@ class ObjectMapperProvider {
         })
 
         return ObjectMapper().tap {
-            it.registerKotlinModule()
-            it.registerModule(module)
+            registerKotlinModule()
+            registerModule(module)
         }
     }
 }

@@ -8,22 +8,22 @@ import com.somanyfeeds.kotlinextensions.getResourceAsStream
 
 class TestDatabaseConfig {
     val dataSource: DataSource = buildTestDataSource()
-    val sqlSessionFactoryBean = SqlSessionFactoryBean().tap { it.setDataSource(dataSource) }
+    val sqlSessionFactoryBean = SqlSessionFactoryBean().tap { setDataSource(dataSource) }
 
     private fun buildTestDataSource(): PGSimpleDataSource {
-        val props = Properties().tap { it.load(getResourceAsStream("connection.properties")) }
+        val props = Properties().tap { load(getResourceAsStream("connection.properties")) }
 
         return PGSimpleDataSource().tap {
-            it.setUser(props.getProperty("test.user"))
-            it.setServerName(props.getProperty("test.serverName"))
-            it.setPortNumber(props.getProperty("test.portNumber").toInt())
-            it.setDatabaseName(props.getProperty("test.databaseName"))
+            setUser(props.getProperty("test.user"))
+            setServerName(props.getProperty("test.serverName"))
+            setPortNumber(props.getProperty("test.portNumber").toInt())
+            setDatabaseName(props.getProperty("test.databaseName"))
         }
     }
 
     public fun buildTestDataMapper<T>(klass: Class<T>): T {
         val sqlSessionFactory = sqlSessionFactoryBean.getObject().tap {
-            it.getConfiguration().addMapper(klass)
+            getConfiguration().addMapper(klass)
         }
 
         return MapperFactoryBean<T>().let { dataMapperFactory ->

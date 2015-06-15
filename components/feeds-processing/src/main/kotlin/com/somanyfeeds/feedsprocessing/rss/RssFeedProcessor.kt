@@ -13,7 +13,7 @@ import java.time.ZonedDateTime
 
 public class RssFeedProcessor(val httpGateway: HttpGateway) : FeedProcessor {
     private val logger = LoggerFactory.getLogger(javaClass<RssFeedProcessor>())
-    private val xmlMapper = XmlMapper().tap { it.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) }
+    private val xmlMapper = XmlMapper().tap { configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) }
     private val utc = ZoneId.of("UTC")
 
     override fun process(feed: Feed): List<Article> {
