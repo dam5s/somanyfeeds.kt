@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select
 import java.sql.Timestamp
 import java.time.ZoneId
 
-public trait ArticlesDataGateway {
+public interface ArticlesDataGateway {
     fun selectAll(): List<Article>
 
     fun create(article: Article, feed: Feed)
@@ -22,7 +22,7 @@ class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper) : Ar
         articleDataMapper.selectAll().map { it.buildArticle() }
 }
 
-trait ArticleDataMapper {
+interface ArticleDataMapper {
     Select("select * from article")
     fun selectAll(): List<ArticleMapping>
 

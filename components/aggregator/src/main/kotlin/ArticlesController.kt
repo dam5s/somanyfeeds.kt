@@ -6,7 +6,7 @@ import java.util.Enumeration
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-public trait ArticlesController {
+public interface ArticlesController {
     public fun listArticles(req: HttpServletRequest, resp: HttpServletResponse)
 }
 
@@ -33,9 +33,7 @@ class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : 
     }
 
     private fun expectedContentType(req: HttpServletRequest) : ContentType {
-        val reqHeaders = req.getHeaders("Accept") as Enumeration<String>
-
-        for (accept in reqHeaders) {
+        for (accept in req.getHeaders("Accept") as Enumeration<String>) {
             if (accept.contains("application/json")) {
                 return ContentType.JSON
             }
@@ -47,8 +45,8 @@ class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : 
     }
 
     private enum class ContentType {
-        JSON
-        HTML
+        JSON,
+        HTML,
         UNKNOWN
     }
 }

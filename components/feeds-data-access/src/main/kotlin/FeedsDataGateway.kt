@@ -2,7 +2,7 @@ package com.somanyfeeds.feedsdataaccess
 
 import org.apache.ibatis.annotations.Select
 
-trait FeedsDataGateway {
+interface FeedsDataGateway {
     fun selectFeeds(): List<Feed>
 }
 
@@ -11,7 +11,7 @@ class PostgresFeedsDataGateway(val feedDataMapper: FeedDataMapper) : FeedsDataGa
         feedDataMapper.selectFeeds().map { it.buildFeed() }
 }
 
-trait FeedDataMapper {
+interface FeedDataMapper {
     Select("select * from feed")
     fun selectFeeds(): List<FeedMapping>;
 }

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-WebServlet(name = "SoManyFeeds", value = array("/"))
+WebServlet(name = "SoManyFeeds", value = "/")
 public class SoManyFeedsServlet(
     val articlesController: ArticlesController = ServiceLocator.articlesController(),
     val feedUpdatesScheduler: FeedUpdatesScheduler = ServiceLocator.feedUpdatesScheduler()

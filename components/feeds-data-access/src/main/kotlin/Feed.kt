@@ -9,6 +9,6 @@ data class Feed(
 )
 
 enum class FeedType {
-    RSS
+    RSS,
     ATOM
 }

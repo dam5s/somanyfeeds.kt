@@ -3,6 +3,6 @@ dependencies {
     compile project(":components/articles-data-access")
     compile project(":components/http-gateway")
 
-    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.4.0"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.5.4"
     compile "org.slf4j:slf4j-api:$slf4jVersion"
 }

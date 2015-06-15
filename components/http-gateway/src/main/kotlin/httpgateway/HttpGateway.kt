@@ -4,7 +4,7 @@ import com.squareup.okhttp.OkHttpClient
 import com.squareup.okhttp.Request
 import org.slf4j.LoggerFactory
 
-public trait HttpGateway {
+public interface HttpGateway {
     fun get(url: String): String
 }
 

@@ -4,7 +4,7 @@ import com.somanyfeeds.articlesdataaccess.Article
 import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
 import com.somanyfeeds.feedsdataaccess.Feed
 
-public trait ArticlesUpdater {
+public interface ArticlesUpdater {
     fun updateArticles(articles: List<Article>, feed: Feed)
 }
 

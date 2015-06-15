@@ -4,7 +4,7 @@ description "SoManyFeeds a simple feed aggregator"
 
 buildscript {
     ext {
-        kotlinVersion = "0.11.91"
+        kotlinVersion = "0.12.412"
         springVersion = "4.1.5.RELEASE"
         myBatisVersion = "3.2.8"
         slf4jVersion = "1.7.12"
@@ -22,6 +22,9 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            url "http://repository.jetbrains.com/all"
+        }
     }
 
     dependencies {
@@ -30,7 +33,7 @@ subprojects {
             compile project(":components/kotlin-extensions")
         }
 
-        testCompile files("${project.rootProject.rootDir}/vendor/spek/spek-core/build/libs/spek-core.jar")
+        testCompile "org.jetbrains.spek:spek:0.1.165"
         testCompile "junit:junit:4.11"
     }
 }

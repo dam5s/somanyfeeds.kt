@@ -4,7 +4,7 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.ScheduledFuture
 
-trait FeedUpdatesScheduler {
+interface FeedUpdatesScheduler {
     fun start()
     fun stop()
 }
