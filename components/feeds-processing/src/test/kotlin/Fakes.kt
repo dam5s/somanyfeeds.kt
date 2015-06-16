@@ -1,10 +1,11 @@
 import com.somanyfeeds.articlesdataaccess.Article
+import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
 import com.somanyfeeds.feedsdataaccess.Feed
 import com.somanyfeeds.feedsdataaccess.FeedsDataGateway
 import com.somanyfeeds.feedsprocessing.ArticlesUpdater
 import com.somanyfeeds.feedsprocessing.FeedProcessor
 import com.somanyfeeds.httpgateway.HttpGateway
-import java.util.ArrayList
+import java.util.*
 
 class FakeFeedsDataGateway(val feeds: List<Feed>) : FeedsDataGateway {
     override fun selectFeeds(): List<Feed> = feeds
@@ -36,5 +37,29 @@ class FakeHttpGateway: HttpGateway {
     override fun get(url: String): String {
         queriedUrl = url
         return stubbedResponse!!
+    }
+}
+
+
+
+class FakeArticlesDataGateway: ArticlesDataGateway {
+    var feedsAndArticles: MutableMap<Feed, MutableList<Article>> = HashMap()
+
+    override fun create(article: Article, feed: Feed) {
+        val articles = feedsAndArticles.get(feed) ?: ArrayList()
+        articles.add(article)
+        feedsAndArticles.put(feed, articles)
+    }
+
+    override fun selectAll(): List<Article> {
+        return feedsAndArticles.values().flatten()
+    }
+
+    override fun selectAllByFeed(feed: Feed): List<Article> {
+        return feedsAndArticles.get(feed) ?: emptyList()
+    }
+
+    override fun removeAllByFeed(feed: Feed) {
+        feedsAndArticles.put(feed, ArrayList())
     }
 }

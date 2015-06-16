@@ -8,7 +8,7 @@ fun buildArticle(
     title: String = "My Article",
     link: String = "http://example.com/articles/my-article",
     content: String = "Hello World",
-    date: ZonedDateTime = ZonedDateTime.now()
+    date: ZonedDateTime = ZonedDateTime.parse("2010-01-02T03:04:05Z[UTC]")
 ) = Article(id, title, link, content, date)
 
 fun buildFeed(

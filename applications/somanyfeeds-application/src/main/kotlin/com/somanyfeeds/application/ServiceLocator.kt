@@ -53,7 +53,7 @@ object ServiceLocator {
             FeedType.RSS to RssFeedProcessor(httpGateway),
             FeedType.ATOM to AtomFeedProcessor(httpGateway)
         ),
-        articlesUpdater = DefaultArticlesUpdater(articlesDataGateway)
+        articlesUpdater = DefaultArticlesUpdater(articlesDataGateway, 20)
     )
     val feedUpdatesScheduler = DefaultFeedUpdatesScheduler(
         scheduledExecutorService = scheduledExecutorService,

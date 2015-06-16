@@ -1,4 +1,4 @@
-import FakeArticleDataGateway
+import FakeArticlesDataGateway
 import TestHttpServletRequest
 import TestHttpServletResponse
 import com.somanyfeeds.aggregator.DefaultArticlesController
@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 
 class ArticlesControllerSpec : Spek() { init {
     given("an ArticlesController and some articles available") {
-        val fakeDataGateway = FakeArticleDataGateway(articles = listOf(
+        val fakeDataGateway = FakeArticlesDataGateway(articles = listOf(
             Article(
                 title = "Some great article",
                 link = "http://example.com/article-1",
@@ -62,14 +62,24 @@ class ArticlesControllerSpec : Spek() { init {
     }
 }}
 
-class FakeArticleDataGateway(val articles: List<Article> = emptyList()) : ArticlesDataGateway {
+class FakeArticlesDataGateway(var articles: List<Article> = emptyList()) : ArticlesDataGateway {
+
     var createdArticle: Article? = null
     var createdArticleForFeed: Feed? = null
-
     override fun create(article: Article, feed: Feed) {
         createdArticle = article
         createdArticleForFeed = feed
     }
 
     override fun selectAll(): List<Article> = articles
+
+    var selectedFeed: Feed? = null
+    override fun selectAllByFeed(feed: Feed): List<Article> {
+        selectedFeed = feed
+        return articles
+    }
+
+    override fun removeAllByFeed(feed: Feed) {
+        throw UnsupportedOperationException()
+    }
 }
