@@ -10,6 +10,7 @@ import com.somanyfeeds.kotlinextensions.tap
 import org.slf4j.LoggerFactory
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import kotlin.text.Regex
 
 public class RssFeedProcessor(val httpGateway: HttpGateway) : FeedProcessor {
     private val logger = LoggerFactory.getLogger(javaClass<RssFeedProcessor>())
@@ -19,7 +20,7 @@ public class RssFeedProcessor(val httpGateway: HttpGateway) : FeedProcessor {
     override fun process(feed: Feed): List<Article> {
         logger.debug("Processing Feed: {}", feed)
 
-        val rssString = httpGateway.get(feed.url)
+        val rssString = httpGateway.get(feed.url).replace("\uFEFF", "")
         val rss = xmlMapper.readValue(rssString, javaClass<Rss>())
         val articles = rss.channel.items.map {
             Article(

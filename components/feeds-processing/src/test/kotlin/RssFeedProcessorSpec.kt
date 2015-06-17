@@ -45,4 +45,19 @@ class RssFeedProcessorSpec : Spek() { init {
             }
         }
     }
+
+    given("an RSS feed from gplus.com with strange encoding") {
+        val feed = buildFeed()
+
+        httpGateway.stubbedResponse = getResourceAsStream("gplus.rss.xml")!!.asString()
+
+        on("feed processing") {
+            val articles = processor.process(feed)
+
+            it("cleans up the article content") {
+                assertTrue(articles.get(0).content.contains("not the opposite."))
+                assertTrue(articles.get(0).content.contains("not the opposite.</div>"))
+            }
+        }
+    }
 }}
