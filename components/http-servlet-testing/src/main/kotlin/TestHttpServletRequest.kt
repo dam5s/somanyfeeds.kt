@@ -1,8 +1,6 @@
 import java.io.BufferedReader
 import java.security.Principal
-import java.util.Enumeration
-import java.util.Locale
-import java.util.Vector
+import java.util.*
 import javax.servlet.*
 import javax.servlet.http.*
 
@@ -12,9 +10,10 @@ class TestHttpServletRequest(
     val httpMethod: String = "GET"
 ) : HttpServletRequest {
 
-    override fun getAttribute(name: String?): Any? {
-        throw UnsupportedOperationException()
-    }
+    val attributes: MutableMap<String, Any> = HashMap()
+    val requestDispatcher = TestRequestDispatcher()
+
+    override fun getAttribute(name: String?): Any? = attributes.get(name!!)
 
     override fun getAttributeNames(): Enumeration<String>? {
         throw UnsupportedOperationException()
@@ -89,11 +88,11 @@ class TestHttpServletRequest(
     }
 
     override fun setAttribute(name: String?, o: Any?) {
-        throw UnsupportedOperationException()
+        attributes.put(name!!, o!!)
     }
 
     override fun removeAttribute(name: String?) {
-        throw UnsupportedOperationException()
+        attributes.remove(name!!)
     }
 
     override fun getLocale(): Locale? {
@@ -109,7 +108,8 @@ class TestHttpServletRequest(
     }
 
     override fun getRequestDispatcher(path: String?): RequestDispatcher? {
-        throw UnsupportedOperationException()
+        requestDispatcher.path = path
+        return requestDispatcher
     }
 
     override fun getRealPath(path: String?): String? {

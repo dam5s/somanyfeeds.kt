@@ -9,6 +9,7 @@ import com.somanyfeeds.jsonserialization.ObjectMapperProvider
 import org.jetbrains.spek.api.Spek
 import java.time.ZonedDateTime
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ArticlesControllerSpec : Spek() { init {
     given("an ArticlesController and some articles available") {
@@ -30,14 +31,14 @@ class ArticlesControllerSpec : Spek() { init {
         val objectMapper = ObjectMapperProvider().get()
 
 
-        on("GET /articles") {
-            val listArticlesReq = TestHttpServletRequest(
+        on("GET /articles with Accept application/json") {
+            val listArticlesAsJsonReq = TestHttpServletRequest(
                 path = "/articles",
                 headers = mapOf("Accept" to listOf("application/json"))
             )
             val listArticlesResp = TestHttpServletResponse()
 
-            controller.listArticles(listArticlesReq, listArticlesResp)
+            controller.listArticles(listArticlesAsJsonReq, listArticlesResp)
 
 
             it("renders articles from the gateway as JSON") {
@@ -57,6 +58,28 @@ class ArticlesControllerSpec : Spek() { init {
 
             it("sets the content-type") {
                 assertEquals("application/json", listArticlesResp.getContentType())
+            }
+        }
+
+        on("GET /articles with Accept text/html") {
+            val listArticlesAsHtmlReq = TestHttpServletRequest(
+                path = "/articles",
+                headers = mapOf("Accept" to listOf("text/html"))
+            )
+            val listArticlesResp = TestHttpServletResponse()
+
+            controller.listArticles(listArticlesAsHtmlReq, listArticlesResp)
+
+            it("sets articles onto the request") {
+                val articles = listArticlesAsHtmlReq.getAttribute("articles") as? List<Article>
+
+                assertTrue(articles != null)
+            }
+
+            it("forwards the request to articles.jsp") {
+                assertEquals("/WEB-INF/articles.jsp", listArticlesAsHtmlReq.requestDispatcher.path)
+                assertEquals(listArticlesAsHtmlReq, listArticlesAsHtmlReq.requestDispatcher.forwardedReq)
+                assertEquals(listArticlesResp, listArticlesAsHtmlReq.requestDispatcher.forwardedResp)
             }
         }
     }
