@@ -37,7 +37,7 @@ object ServiceLocator {
     }
 
     val articleDataMapper = buildDataMapper(javaClass<ArticleDataMapper>())
-    val articlesDataGateway = PostgresArticlesDataGateway(articleDataMapper = articleDataMapper);
+    val articlesDataGateway = PostgresArticlesDataGateway(articleDataMapper = articleDataMapper, dataSource = dataSource);
     val articlesController = DefaultArticlesController(articlesDataGateway = articlesDataGateway)
 
     val scheduledExecutorService: ScheduledExecutorService = ScheduledThreadPoolExecutor(2)

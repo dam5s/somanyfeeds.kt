@@ -186,7 +186,9 @@ class TestHttpServletRequest(
 
     override fun getMethod(): String? = httpMethod
 
-    override fun getPathInfo(): String? = path
+    override fun getPathInfo(): String? {
+        throw UnsupportedOperationException()
+    }
 
     override fun getPathTranslated(): String? {
         throw UnsupportedOperationException()
@@ -216,9 +218,7 @@ class TestHttpServletRequest(
         throw UnsupportedOperationException()
     }
 
-    override fun getRequestURI(): String? {
-        throw UnsupportedOperationException()
-    }
+    override fun getRequestURI(): String? = path
 
     override fun getRequestURL(): StringBuffer? {
         throw UnsupportedOperationException()

@@ -4,9 +4,11 @@ import com.somanyfeeds.feedsdataaccess.Feed
 import com.somanyfeeds.kotlinextensions.toUtcZonedDateTime
 import org.apache.ibatis.annotations.Delete
 import org.apache.ibatis.annotations.Insert
+import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
 import java.sql.Timestamp
 import java.time.ZoneId
+import javax.sql.DataSource
 
 public interface ArticlesDataGateway {
     fun create(article: Article, feed: Feed)
@@ -15,10 +17,13 @@ public interface ArticlesDataGateway {
 
     fun selectAllByFeed(feed: Feed): List<Article>
 
+    fun selectAllByFeedSlugs(slugs: List<String>): List<Article>
+
     fun removeAllByFeed(feed: Feed)
 }
 
-class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper) : ArticlesDataGateway {
+class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper, val dataSource: DataSource) : ArticlesDataGateway {
+
     override fun create(article: Article, feed: Feed) =
         articleDataMapper.create(ArticleMapping(article, feed.id!!))
 
@@ -28,8 +33,13 @@ class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper) : Ar
     override fun selectAllByFeed(feed: Feed): List<Article> =
         articleDataMapper.selectAllByFeed(feed).map { it.buildArticle() }
 
-    override fun removeAllByFeed(feed: Feed)
-        = articleDataMapper.removeAllByFeed(feed)
+    override fun selectAllByFeedSlugs(slugs: List<String>): List<Article> {
+        val slugsArray = dataSource.getConnection().createArrayOf("text", slugs.toTypedArray())
+        return articleDataMapper.selectAllByFeedSlugs(slugsArray).map { it.buildArticle() }
+    }
+
+    override fun removeAllByFeed(feed: Feed) =
+        articleDataMapper.removeAllByFeed(feed)
 }
 
 interface ArticleDataMapper {
@@ -38,6 +48,9 @@ interface ArticleDataMapper {
 
     Select("select * from article where feed_id = #{id}")
     fun selectAllByFeed(feed: Feed): List<ArticleMapping>
+
+    Select("select article.* from article inner join feed on article.feed_id = feed.id where slug = any(#{slugs}::text[])")
+    fun selectAllByFeedSlugs(Param("slugs") slugs: java.sql.Array): List<ArticleMapping>
 
     Insert("insert into article (feed_id, title, link, content, date) values (#{feedId}, #{title}, #{link}, #{content}, #{date})")
     fun create(article: ArticleMapping)

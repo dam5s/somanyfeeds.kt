@@ -9,11 +9,15 @@ import com.somanyfeeds.jsonserialization.ObjectMapperProvider
 import org.jetbrains.spek.api.Spek
 import java.time.ZonedDateTime
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ArticlesControllerSpec : Spek() { init {
-    given("an ArticlesController and some articles available") {
-        val fakeDataGateway = FakeArticlesDataGateway(articles = listOf(
+    val objectMapper = ObjectMapperProvider().get()
+
+    given("some articles available") {
+        val availableArticles = listOf(
             Article(
                 title = "Some great article",
                 link = "http://example.com/article-1",
@@ -26,22 +30,25 @@ class ArticlesControllerSpec : Spek() { init {
                 content = "Some other article content...",
                 date = ZonedDateTime.parse("2011-01-30T02:03:04Z")
             )
-        ))
-        val controller = DefaultArticlesController(articlesDataGateway = fakeDataGateway)
-        val objectMapper = ObjectMapperProvider().get()
+        )
 
-
-        on("GET /articles with Accept application/json") {
+        on("GET / with Accept application/json") {
+            val fakeDataGateway = FakeArticlesDataGateway(articles = availableArticles)
+            val controller = DefaultArticlesController(articlesDataGateway = fakeDataGateway)
             val listArticlesAsJsonReq = TestHttpServletRequest(
-                path = "/articles",
+                path = "/",
                 headers = mapOf("Accept" to listOf("application/json"))
             )
             val listArticlesResp = TestHttpServletResponse()
 
             controller.listArticles(listArticlesAsJsonReq, listArticlesResp)
 
+            val didSelectAll = fakeDataGateway.didSelectAll
 
             it("renders articles from the gateway as JSON") {
+                assertTrue(didSelectAll)
+                assertNull(fakeDataGateway.didSelectByFeedSlugs)
+
                 val articles = objectMapper.readValue(listArticlesResp.getBody(), javaClass<List<Map<String, String>>>())
                 assertEquals(2, articles.size())
 
@@ -61,19 +68,56 @@ class ArticlesControllerSpec : Spek() { init {
             }
         }
 
-        on("GET /articles with Accept text/html") {
+        on("GET / with Accept text/html") {
+            val fakeDataGateway = FakeArticlesDataGateway(articles = availableArticles)
+            val controller = DefaultArticlesController(articlesDataGateway = fakeDataGateway)
             val listArticlesAsHtmlReq = TestHttpServletRequest(
-                path = "/articles",
+                path = "/",
                 headers = mapOf("Accept" to listOf("text/html"))
             )
             val listArticlesResp = TestHttpServletResponse()
 
             controller.listArticles(listArticlesAsHtmlReq, listArticlesResp)
 
-            it("sets articles onto the request") {
+            val didSelectAll = fakeDataGateway.didSelectAll
+            val didSelectByFeedSlugs = fakeDataGateway.didSelectByFeedSlugs
+
+
+            it("gets all articles and sets them onto the request") {
                 val articles = listArticlesAsHtmlReq.getAttribute("articles") as? List<Article>
 
-                assertTrue(articles != null)
+                assertTrue(didSelectAll)
+                assertEquals(null, didSelectByFeedSlugs)
+                assertEquals(availableArticles, articles)
+            }
+
+            it("forwards the request to articles.jsp") {
+                assertEquals("/WEB-INF/articles.jsp", listArticlesAsHtmlReq.requestDispatcher.path)
+                assertEquals(listArticlesAsHtmlReq, listArticlesAsHtmlReq.requestDispatcher.forwardedReq)
+                assertEquals(listArticlesResp, listArticlesAsHtmlReq.requestDispatcher.forwardedResp)
+            }
+        }
+
+        on("GET /my-feed,my-other-feed with Accept text/html") {
+            val fakeDataGateway = FakeArticlesDataGateway(articles = availableArticles)
+            val controller = DefaultArticlesController(articlesDataGateway = fakeDataGateway)
+            val listArticlesAsHtmlReq = TestHttpServletRequest(
+                path = "/my-feed,my-other-feed",
+                headers = mapOf("Accept" to listOf("text/html"))
+            )
+            val listArticlesResp = TestHttpServletResponse()
+
+            controller.listArticles(listArticlesAsHtmlReq, listArticlesResp)
+
+            val didSelectAll = fakeDataGateway.didSelectAll
+            val didSelectByFeedSlugs = fakeDataGateway.didSelectByFeedSlugs
+
+            it("gets articles by feeds and sets them onto the request") {
+                val articles = listArticlesAsHtmlReq.getAttribute("articles") as? List<Article>
+
+                assertFalse(didSelectAll)
+                assertEquals(listOf("my-feed", "my-other-feed"), didSelectByFeedSlugs)
+                assertEquals(availableArticles, articles)
             }
 
             it("forwards the request to articles.jsp") {
@@ -94,11 +138,21 @@ class FakeArticlesDataGateway(var articles: List<Article> = emptyList()) : Artic
         createdArticleForFeed = feed
     }
 
-    override fun selectAll(): List<Article> = articles
+    var didSelectAll = false
+    override fun selectAll(): List<Article> {
+        didSelectAll = true
+        return articles
+    }
 
-    var selectedFeed: Feed? = null
+    var didSelectByFeed: Feed? = null
     override fun selectAllByFeed(feed: Feed): List<Article> {
-        selectedFeed = feed
+        didSelectByFeed = feed
+        return articles
+    }
+
+    var didSelectByFeedSlugs: List<String>? = null
+    override fun selectAllByFeedSlugs(slugs: List<String>): List<Article> {
+        didSelectByFeedSlugs = slugs
         return articles
     }
 

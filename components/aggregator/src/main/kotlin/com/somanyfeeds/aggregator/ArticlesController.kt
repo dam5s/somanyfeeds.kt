@@ -1,5 +1,6 @@
 package com.somanyfeeds.aggregator
 
+import com.somanyfeeds.articlesdataaccess.Article
 import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
 import com.somanyfeeds.jsonserialization.ObjectMapperProvider
 import java.util.Enumeration
@@ -16,7 +17,14 @@ class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : 
     override fun listArticles(req: HttpServletRequest, resp: HttpServletResponse) {
         resp.setContentType("application/json")
 
-        val articles = articlesDataGateway.selectAll()
+        val articles: List<Article>
+        val requestPath = req.getRequestURI()
+
+        if (requestPath.length() <= 1) {
+            articles = articlesDataGateway.selectAll()
+        } else {
+            articles = articlesDataGateway.selectAllByFeedSlugs(requestPath.removePrefix("/").splitBy(","))
+        }
 
         when (expectedContentType(req)) {
             ContentType.JSON -> {

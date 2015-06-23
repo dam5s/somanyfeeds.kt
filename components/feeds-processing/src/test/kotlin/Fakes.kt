@@ -59,6 +59,10 @@ class FakeArticlesDataGateway: ArticlesDataGateway {
         return feedsAndArticles.get(feed) ?: emptyList()
     }
 
+    override fun selectAllByFeedSlugs(slugs: List<String>): List<Article> {
+        throw UnsupportedOperationException()
+    }
+
     override fun removeAllByFeed(feed: Feed) {
         feedsAndArticles.put(feed, ArrayList())
     }
