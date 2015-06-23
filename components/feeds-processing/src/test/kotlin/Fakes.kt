@@ -43,16 +43,12 @@ class FakeHttpGateway: HttpGateway {
 
 
 class FakeArticlesDataGateway: ArticlesDataGateway {
-    var feedsAndArticles: MutableMap<Feed, MutableList<Article>> = HashMap()
+    public val feedsAndArticles: MutableMap<Feed, MutableList<Article>> = HashMap()
 
     override fun create(article: Article, feed: Feed) {
         val articles = feedsAndArticles.get(feed) ?: ArrayList()
         articles.add(article)
         feedsAndArticles.put(feed, articles)
-    }
-
-    override fun selectAllByFeed(feed: Feed): List<Article> {
-        return feedsAndArticles.get(feed) ?: emptyList()
     }
 
     override fun selectAllByFeedSlugs(slugs: Set<String>): List<Article> {

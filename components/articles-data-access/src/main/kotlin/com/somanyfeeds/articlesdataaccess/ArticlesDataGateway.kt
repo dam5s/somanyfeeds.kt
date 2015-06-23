@@ -13,8 +13,6 @@ import javax.sql.DataSource
 public interface ArticlesDataGateway {
     fun create(article: Article, feed: Feed)
 
-    fun selectAllByFeed(feed: Feed): List<Article>
-
     fun selectAllByFeedSlugs(slugs: Set<String>): List<Article>
 
     fun removeAllByFeed(feed: Feed)
@@ -24,9 +22,6 @@ class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper, val 
 
     override fun create(article: Article, feed: Feed) =
         articleDataMapper.create(ArticleMapping(article, feed.id!!))
-
-    override fun selectAllByFeed(feed: Feed): List<Article> =
-        articleDataMapper.selectAllByFeed(feed).map { it.buildArticle() }
 
     override fun selectAllByFeedSlugs(slugs: Set<String>): List<Article> {
         val slugsArray = dataSource.getConnection().createArrayOf("text", slugs.toTypedArray())
@@ -38,14 +33,11 @@ class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper, val 
 }
 
 interface ArticleDataMapper {
-    Select("select * from article where feed_id = #{id}")
-    fun selectAllByFeed(feed: Feed): List<ArticleMapping>
+    Insert("insert into article (feed_id, title, link, content, date) values (#{feedId}, #{title}, #{link}, #{content}, #{date})")
+    fun create(article: ArticleMapping)
 
     Select("select article.* from article inner join feed on article.feed_id = feed.id where slug = any(#{slugs}::text[])")
     fun selectAllByFeedSlugs(Param("slugs") slugs: java.sql.Array): List<ArticleMapping>
-
-    Insert("insert into article (feed_id, title, link, content, date) values (#{feedId}, #{title}, #{link}, #{content}, #{date})")
-    fun create(article: ArticleMapping)
 
     Delete("delete from article where feed_id = #{id}")
     fun removeAllByFeed(feed: Feed)

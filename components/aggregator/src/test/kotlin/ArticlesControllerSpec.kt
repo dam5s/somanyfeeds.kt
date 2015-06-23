@@ -126,17 +126,8 @@ class ArticlesControllerSpec : Spek() { init {
 
 class FakeArticlesDataGateway(var articles: List<Article> = emptyList()) : ArticlesDataGateway {
 
-    var createdArticle: Article? = null
-    var createdArticleForFeed: Feed? = null
     override fun create(article: Article, feed: Feed) {
-        createdArticle = article
-        createdArticleForFeed = feed
-    }
-
-    var didSelectByFeed: Feed? = null
-    override fun selectAllByFeed(feed: Feed): List<Article> {
-        didSelectByFeed = feed
-        return articles
+        throw UnsupportedOperationException()
     }
 
     var didSelectByFeedSlugs: Set<String>? = null

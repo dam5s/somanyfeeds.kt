@@ -93,7 +93,7 @@ class ArticlesDataGatewaySpec : Spek() { init {
         on("remove all by feed") {
             dataGateway.removeAllByFeed(buildFeed(id = 90))
 
-            val remainingArticles = dataGateway.selectAllByFeed(buildFeed(id = 90))
+            val remainingArticles = dataGateway.selectAllByFeedSlugs(setOf("github"))
 
             it("removes all articles for that feed") {
                 assertTrue(remainingArticles.isEmpty())

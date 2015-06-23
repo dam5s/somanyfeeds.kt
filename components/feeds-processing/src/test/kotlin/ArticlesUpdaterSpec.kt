@@ -21,7 +21,7 @@ class ArticlesUpdaterSpec : Spek() { init {
                 buildArticle(id = 106)
             ), feed)
 
-            val feedArticles = fakeGateway.selectAllByFeed(feed)
+            val feedArticles = fakeGateway.feedsAndArticles.get(feed)!!
 
             it("removes all old articles") {
                 assertFalse(feedArticles.contains(buildArticle(id = 101)))
@@ -39,5 +39,4 @@ class ArticlesUpdaterSpec : Spek() { init {
             }
         }
     }
-}
-}
+}}
