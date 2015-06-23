@@ -17,7 +17,7 @@ public interface ArticlesDataGateway {
 
     fun selectAllByFeed(feed: Feed): List<Article>
 
-    fun selectAllByFeedSlugs(slugs: List<String>): List<Article>
+    fun selectAllByFeedSlugs(slugs: Set<String>): List<Article>
 
     fun removeAllByFeed(feed: Feed)
 }
@@ -33,7 +33,7 @@ class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper, val 
     override fun selectAllByFeed(feed: Feed): List<Article> =
         articleDataMapper.selectAllByFeed(feed).map { it.buildArticle() }
 
-    override fun selectAllByFeedSlugs(slugs: List<String>): List<Article> {
+    override fun selectAllByFeedSlugs(slugs: Set<String>): List<Article> {
         val slugsArray = dataSource.getConnection().createArrayOf("text", slugs.toTypedArray())
         return articleDataMapper.selectAllByFeedSlugs(slugsArray).map { it.buildArticle() }
     }

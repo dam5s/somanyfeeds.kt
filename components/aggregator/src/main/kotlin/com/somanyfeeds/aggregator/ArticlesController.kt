@@ -12,19 +12,16 @@ public interface ArticlesController {
 }
 
 class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : ArticlesController {
-    val objectMapper = ObjectMapperProvider().get()
+    private val objectMapper = ObjectMapperProvider().get()
+    private val DEFAULT_FEED_SLUGS = setOf("gplus", "pivotal")
 
     override fun listArticles(req: HttpServletRequest, resp: HttpServletResponse) {
         resp.setContentType("application/json")
 
-        val articles: List<Article>
-        val requestPath = req.getRequestURI()
-
-        if (requestPath.length() <= 1) {
-            articles = articlesDataGateway.selectAll()
-        } else {
-            articles = articlesDataGateway.selectAllByFeedSlugs(requestPath.removePrefix("/").splitBy(","))
-        }
+        val path = req.getRequestURI()
+        val isRoot = path.length() <= 1
+        val slugs = if (isRoot) DEFAULT_FEED_SLUGS else path.removePrefix("/").splitBy(",").toSet()
+        val articles = articlesDataGateway.selectAllByFeedSlugs(slugs)
 
         when (expectedContentType(req)) {
             ContentType.JSON -> {

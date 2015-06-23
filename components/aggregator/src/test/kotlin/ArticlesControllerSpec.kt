@@ -44,10 +44,11 @@ class ArticlesControllerSpec : Spek() { init {
             controller.listArticles(listArticlesAsJsonReq, listArticlesResp)
 
             val didSelectAll = fakeDataGateway.didSelectAll
+            val didSelectByFeedSlugs = fakeDataGateway.didSelectByFeedSlugs
 
             it("renders articles from the gateway as JSON") {
-                assertTrue(didSelectAll)
-                assertNull(fakeDataGateway.didSelectByFeedSlugs)
+                assertFalse(didSelectAll)
+                assertEquals(setOf("gplus", "pivotal"), didSelectByFeedSlugs)
 
                 val articles = objectMapper.readValue(listArticlesResp.getBody(), javaClass<List<Map<String, String>>>())
                 assertEquals(2, articles.size())
@@ -83,11 +84,11 @@ class ArticlesControllerSpec : Spek() { init {
             val didSelectByFeedSlugs = fakeDataGateway.didSelectByFeedSlugs
 
 
-            it("gets all articles and sets them onto the request") {
+            it("gets articles by default feeds and sets them onto the request") {
                 val articles = listArticlesAsHtmlReq.getAttribute("articles") as? List<Article>
 
-                assertTrue(didSelectAll)
-                assertEquals(null, didSelectByFeedSlugs)
+                assertFalse(didSelectAll)
+                assertEquals(setOf("gplus", "pivotal"), didSelectByFeedSlugs)
                 assertEquals(availableArticles, articles)
             }
 
@@ -116,7 +117,7 @@ class ArticlesControllerSpec : Spek() { init {
                 val articles = listArticlesAsHtmlReq.getAttribute("articles") as? List<Article>
 
                 assertFalse(didSelectAll)
-                assertEquals(listOf("my-feed", "my-other-feed"), didSelectByFeedSlugs)
+                assertEquals(setOf("my-feed", "my-other-feed"), didSelectByFeedSlugs)
                 assertEquals(availableArticles, articles)
             }
 
@@ -150,8 +151,8 @@ class FakeArticlesDataGateway(var articles: List<Article> = emptyList()) : Artic
         return articles
     }
 
-    var didSelectByFeedSlugs: List<String>? = null
-    override fun selectAllByFeedSlugs(slugs: List<String>): List<Article> {
+    var didSelectByFeedSlugs: Set<String>? = null
+    override fun selectAllByFeedSlugs(slugs: Set<String>): List<Article> {
         didSelectByFeedSlugs = slugs
         return articles
     }

@@ -74,7 +74,7 @@ class ArticlesDataGatewaySpec : Spek() { init {
         }
 
         on("select all by feed slugs") {
-            val articlesByFeed = dataGateway.selectAllByFeedSlugs(listOf("photos", "blog"))
+            val articlesByFeed = dataGateway.selectAllByFeedSlugs(setOf("photos", "blog"))
 
             it("returns a list of all articles for matching feeds in the database") {
                 val expectedArticles = listOf(
