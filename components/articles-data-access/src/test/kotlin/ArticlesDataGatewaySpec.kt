@@ -35,44 +35,6 @@ class ArticlesDataGatewaySpec : Spek() { init {
         """)
 
 
-        on("selectAll") {
-            val allArticles = dataGateway.selectAll()
-
-            it("returns a list of all articles in the database") {
-                val expectedArticles = listOf(
-                    Article(
-                        id = 101,
-                        title = "Article #1",
-                        link = "http://example.com/article-1",
-                        content = "Article #1 content...",
-                        date = ZonedDateTime.parse("2010-01-29T01:02:03Z[UTC]")
-                    ),
-                    Article(
-                        id = 102,
-                        title = "Article #2",
-                        link = "http://example.com/article-2",
-                        content = "Article #2 content...",
-                        date = ZonedDateTime.parse("2010-02-28T01:02:03Z[UTC]")
-                    ),
-                    Article(
-                        id = 103,
-                        title = "Article #3",
-                        link = "http://example.com/article-3",
-                        content = "Article #3 content...",
-                        date = ZonedDateTime.parse("2010-03-29T01:02:03Z[UTC]")
-                    ),
-                    Article(
-                        id = 104,
-                        title = "Photo #1",
-                        link = "http://example.com/photo-1",
-                        content = "Photo #1 content...",
-                        date = ZonedDateTime.parse("2010-03-29T01:02:03Z[UTC]")
-                    )
-                )
-                assertEquals(expectedArticles, allArticles)
-            }
-        }
-
         on("select all by feed slugs") {
             val articlesByFeed = dataGateway.selectAllByFeedSlugs(setOf("photos", "blog"))
 
@@ -112,14 +74,14 @@ class ArticlesDataGatewaySpec : Spek() { init {
                 date = ZonedDateTime.parse("2010-04-29T02:02:03Z[UTC]").withZoneSameLocal(ZoneId.of("+0100"))
             )
 
-            dataGateway.create(newArticle, buildFeed(id = 90))
+            dataGateway.create(newArticle, buildFeed(id = 90, slug = ""))
 
-            val updatedArticles = dataGateway.selectAll()
+            val updatedArticles = dataGateway.selectAllByFeedSlugs(setOf("github"))
 
             it("inserts the new record in the database") {
-                assertEquals(5, updatedArticles.size())
+                assertEquals(2, updatedArticles.size())
 
-                val createdArticle = updatedArticles.sortBy { it.title }.get(3)
+                val createdArticle = updatedArticles.sortBy { it.title }.get(1)
                 assertTrue(createdArticle.id != null)
                 assertEquals("Article #4", createdArticle.title)
                 assertEquals("http://example.com/article-4", createdArticle.link)

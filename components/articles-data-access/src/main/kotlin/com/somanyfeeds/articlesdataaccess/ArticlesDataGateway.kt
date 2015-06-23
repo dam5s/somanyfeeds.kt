@@ -13,8 +13,6 @@ import javax.sql.DataSource
 public interface ArticlesDataGateway {
     fun create(article: Article, feed: Feed)
 
-    fun selectAll(): List<Article>
-
     fun selectAllByFeed(feed: Feed): List<Article>
 
     fun selectAllByFeedSlugs(slugs: Set<String>): List<Article>
@@ -26,9 +24,6 @@ class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper, val 
 
     override fun create(article: Article, feed: Feed) =
         articleDataMapper.create(ArticleMapping(article, feed.id!!))
-
-    override fun selectAll(): List<Article> =
-        articleDataMapper.selectAll().map { it.buildArticle() }
 
     override fun selectAllByFeed(feed: Feed): List<Article> =
         articleDataMapper.selectAllByFeed(feed).map { it.buildArticle() }
@@ -43,9 +38,6 @@ class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper, val 
 }
 
 interface ArticleDataMapper {
-    Select("select * from article")
-    fun selectAll(): List<ArticleMapping>
-
     Select("select * from article where feed_id = #{id}")
     fun selectAllByFeed(feed: Feed): List<ArticleMapping>
 

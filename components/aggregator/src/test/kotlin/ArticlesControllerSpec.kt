@@ -43,11 +43,9 @@ class ArticlesControllerSpec : Spek() { init {
 
             controller.listArticles(listArticlesAsJsonReq, listArticlesResp)
 
-            val didSelectAll = fakeDataGateway.didSelectAll
             val didSelectByFeedSlugs = fakeDataGateway.didSelectByFeedSlugs
 
             it("renders articles from the gateway as JSON") {
-                assertFalse(didSelectAll)
                 assertEquals(setOf("gplus", "pivotal"), didSelectByFeedSlugs)
 
                 val articles = objectMapper.readValue(listArticlesResp.getBody(), javaClass<List<Map<String, String>>>())
@@ -80,14 +78,12 @@ class ArticlesControllerSpec : Spek() { init {
 
             controller.listArticles(listArticlesAsHtmlReq, listArticlesResp)
 
-            val didSelectAll = fakeDataGateway.didSelectAll
             val didSelectByFeedSlugs = fakeDataGateway.didSelectByFeedSlugs
 
 
             it("gets articles by default feeds and sets them onto the request") {
                 val articles = listArticlesAsHtmlReq.getAttribute("articles") as? List<Article>
 
-                assertFalse(didSelectAll)
                 assertEquals(setOf("gplus", "pivotal"), didSelectByFeedSlugs)
                 assertEquals(availableArticles, articles)
             }
@@ -110,13 +106,11 @@ class ArticlesControllerSpec : Spek() { init {
 
             controller.listArticles(listArticlesAsHtmlReq, listArticlesResp)
 
-            val didSelectAll = fakeDataGateway.didSelectAll
             val didSelectByFeedSlugs = fakeDataGateway.didSelectByFeedSlugs
 
             it("gets articles by feeds and sets them onto the request") {
                 val articles = listArticlesAsHtmlReq.getAttribute("articles") as? List<Article>
 
-                assertFalse(didSelectAll)
                 assertEquals(setOf("my-feed", "my-other-feed"), didSelectByFeedSlugs)
                 assertEquals(availableArticles, articles)
             }
@@ -137,12 +131,6 @@ class FakeArticlesDataGateway(var articles: List<Article> = emptyList()) : Artic
     override fun create(article: Article, feed: Feed) {
         createdArticle = article
         createdArticleForFeed = feed
-    }
-
-    var didSelectAll = false
-    override fun selectAll(): List<Article> {
-        didSelectAll = true
-        return articles
     }
 
     var didSelectByFeed: Feed? = null

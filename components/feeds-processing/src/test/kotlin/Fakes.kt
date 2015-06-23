@@ -51,10 +51,6 @@ class FakeArticlesDataGateway: ArticlesDataGateway {
         feedsAndArticles.put(feed, articles)
     }
 
-    override fun selectAll(): List<Article> {
-        return feedsAndArticles.values().flatten()
-    }
-
     override fun selectAllByFeed(feed: Feed): List<Article> {
         return feedsAndArticles.get(feed) ?: emptyList()
     }
