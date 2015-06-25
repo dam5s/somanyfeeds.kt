@@ -25,29 +25,30 @@ import java.util.concurrent.ScheduledThreadPoolExecutor
 import javax.sql.DataSource
 
 object ServiceLocator {
-    val dataSource: DataSource = PGSimpleDataSource().tap {
+    private val dataSource: DataSource = PGSimpleDataSource().tap {
         setUser("dam5s")
         setServerName("localhost")
         setPortNumber(5432)
         setDatabaseName("somanyfeeds_dev")
     }
 
-    val sqlSessionFactoryBean = SqlSessionFactoryBean().tap {
+    private val sqlSessionFactoryBean = SqlSessionFactoryBean().tap {
         setDataSource(dataSource)
     }
 
-    val articleDataMapper = buildDataMapper(javaClass<ArticleDataMapper>())
-    val articlesDataGateway = PostgresArticlesDataGateway(articleDataMapper = articleDataMapper, dataSource = dataSource);
-    val articlesController = DefaultArticlesController(articlesDataGateway = articlesDataGateway)
+    private val feedDataMapper = buildDataMapper(javaClass<FeedDataMapper>())
+    private val feedsDataGateway = PostgresFeedsDataGateway(feedDataMapper = feedDataMapper)
 
-    val scheduledExecutorService: ScheduledExecutorService = ScheduledThreadPoolExecutor(2)
+    private val articleDataMapper = buildDataMapper(javaClass<ArticleDataMapper>())
+    private val articlesDataGateway = PostgresArticlesDataGateway(articleDataMapper, dataSource);
 
-    val feedDataMapper = buildDataMapper(javaClass<FeedDataMapper>())
-    val feedsDataGateway = PostgresFeedsDataGateway(feedDataMapper = feedDataMapper)
+    private val articlesController = DefaultArticlesController(articlesDataGateway, feedsDataGateway)
 
-    val httpGateway: HttpGateway = OkHttpGateway(OkHttpClient())
+    private val scheduledExecutorService: ScheduledExecutorService = ScheduledThreadPoolExecutor(2)
 
-    val feedsUpdater = FeedsUpdater(
+    private val httpGateway: HttpGateway = OkHttpGateway(OkHttpClient())
+
+    private val feedsUpdater = FeedsUpdater(
         feedsDataGateway = feedsDataGateway,
         feedProcessors = mapOf(
             FeedType.RSS to RssFeedProcessor(httpGateway),
@@ -55,7 +56,8 @@ object ServiceLocator {
         ),
         articlesUpdater = DefaultArticlesUpdater(articlesDataGateway, 20)
     )
-    val feedUpdatesScheduler = DefaultFeedUpdatesScheduler(
+
+    private val feedUpdatesScheduler = DefaultFeedUpdatesScheduler(
         scheduledExecutorService = scheduledExecutorService,
         feedsUpdater = feedsUpdater
     )

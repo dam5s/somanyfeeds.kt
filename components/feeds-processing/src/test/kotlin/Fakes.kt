@@ -8,7 +8,7 @@ import com.somanyfeeds.httpgateway.HttpGateway
 import java.util.*
 
 class FakeFeedsDataGateway(val feeds: List<Feed>) : FeedsDataGateway {
-    override fun selectFeeds(): List<Feed> = feeds
+    override fun selectAllFeeds(): List<Feed> = feeds
 }
 
 class FakeFeedProcessor(var stubbedArticles: List<Article>) : FeedProcessor {

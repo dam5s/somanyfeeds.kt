@@ -2,6 +2,7 @@ package com.somanyfeeds.aggregator
 
 import com.somanyfeeds.articlesdataaccess.Article
 import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
+import com.somanyfeeds.feedsdataaccess.FeedsDataGateway
 import com.somanyfeeds.jsonserialization.ObjectMapperProvider
 import java.util.Enumeration
 import javax.servlet.http.HttpServletRequest
@@ -11,7 +12,7 @@ public interface ArticlesController {
     public fun listArticles(req: HttpServletRequest, resp: HttpServletResponse)
 }
 
-class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : ArticlesController {
+class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway, val feedsDataGateway: FeedsDataGateway) : ArticlesController {
     private val objectMapper = ObjectMapperProvider().get()
     private val DEFAULT_FEED_SLUGS = setOf("gplus", "pivotal")
 
@@ -25,16 +26,29 @@ class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway) : 
 
         when (expectedContentType(req)) {
             ContentType.JSON -> {
-                objectMapper.writeValue(resp.getWriter(), articles)
+                renderJSONArticles(articles, resp)
             }
             ContentType.HTML -> {
-                req.setAttribute("articles", articles)
-                req.getRequestDispatcher("/WEB-INF/articles.jsp").forward(req, resp)
+                renderHTMLArticles(articles, slugs, req, resp)
             }
             ContentType.UNKNOWN -> {
                 resp.setStatus(406)
             }
         }
+    }
+
+    private fun renderJSONArticles(articles: List<Article>, resp: HttpServletResponse) {
+        objectMapper.writeValue(resp.getWriter(), articles)
+    }
+
+    private fun renderHTMLArticles(articles: List<Article>, slugs: Set<String>, req: HttpServletRequest, resp: HttpServletResponse) {
+        val feeds = feedsDataGateway.selectAllFeeds()
+        val feedPresenters = feeds.map { FeedPresenter(it, slugs) }
+
+
+        req.setAttribute("feeds", feedPresenters)
+        req.setAttribute("articles", articles)
+        req.getRequestDispatcher("/WEB-INF/articles.jsp").forward(req, resp)
     }
 
     private fun expectedContentType(req: HttpServletRequest) : ContentType {

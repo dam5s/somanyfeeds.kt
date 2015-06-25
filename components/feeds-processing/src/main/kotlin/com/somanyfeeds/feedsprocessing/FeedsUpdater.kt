@@ -13,7 +13,7 @@ class FeedsUpdater(
 ) : Runnable {
 
     override fun run() {
-        for (feed in feedsDataGateway.selectFeeds()) {
+        for (feed in feedsDataGateway.selectAllFeeds()) {
             val processor = feedProcessors.get(feed.type)
             val articles = processor!!.process(feed)
 

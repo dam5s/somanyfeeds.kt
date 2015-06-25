@@ -3,11 +3,11 @@ package com.somanyfeeds.feedsdataaccess
 import org.apache.ibatis.annotations.Select
 
 interface FeedsDataGateway {
-    fun selectFeeds(): List<Feed>
+    fun selectAllFeeds(): List<Feed>
 }
 
 class PostgresFeedsDataGateway(val feedDataMapper: FeedDataMapper) : FeedsDataGateway {
-    override fun selectFeeds(): List<Feed> =
+    override fun selectAllFeeds(): List<Feed> =
         feedDataMapper.selectFeeds().map { it.buildFeed() }
 }
 

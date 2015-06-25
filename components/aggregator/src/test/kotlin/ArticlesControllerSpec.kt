@@ -33,8 +33,9 @@ class ArticlesControllerSpec : Spek() { init {
         )
 
         on("GET / with Accept application/json") {
-            val fakeDataGateway = FakeArticlesDataGateway(articles = availableArticles)
-            val controller = DefaultArticlesController(articlesDataGateway = fakeDataGateway)
+            val fakeArticlesDataGateway = FakeArticlesDataGateway(availableArticles)
+            val fakeFeedsDataGateway = FakeFeedsDataGateway()
+            val controller = DefaultArticlesController(fakeArticlesDataGateway, fakeFeedsDataGateway)
             val listArticlesAsJsonReq = TestHttpServletRequest(
                 path = "/",
                 headers = mapOf("Accept" to listOf("application/json"))
@@ -43,7 +44,7 @@ class ArticlesControllerSpec : Spek() { init {
 
             controller.listArticles(listArticlesAsJsonReq, listArticlesResp)
 
-            val didSelectByFeedSlugs = fakeDataGateway.didSelectByFeedSlugs
+            val didSelectByFeedSlugs = fakeArticlesDataGateway.didSelectByFeedSlugs
 
             it("renders articles from the gateway as JSON") {
                 assertEquals(setOf("gplus", "pivotal"), didSelectByFeedSlugs)
@@ -68,8 +69,9 @@ class ArticlesControllerSpec : Spek() { init {
         }
 
         on("GET / with Accept text/html") {
-            val fakeDataGateway = FakeArticlesDataGateway(articles = availableArticles)
-            val controller = DefaultArticlesController(articlesDataGateway = fakeDataGateway)
+            val fakeArticlesDataGateway = FakeArticlesDataGateway(availableArticles)
+            val fakeFeedsDataGateway = FakeFeedsDataGateway()
+            val controller = DefaultArticlesController(fakeArticlesDataGateway, fakeFeedsDataGateway)
             val listArticlesAsHtmlReq = TestHttpServletRequest(
                 path = "/",
                 headers = mapOf("Accept" to listOf("text/html"))
@@ -78,7 +80,7 @@ class ArticlesControllerSpec : Spek() { init {
 
             controller.listArticles(listArticlesAsHtmlReq, listArticlesResp)
 
-            val didSelectByFeedSlugs = fakeDataGateway.didSelectByFeedSlugs
+            val didSelectByFeedSlugs = fakeArticlesDataGateway.didSelectByFeedSlugs
 
 
             it("gets articles by default feeds and sets them onto the request") {
@@ -96,8 +98,9 @@ class ArticlesControllerSpec : Spek() { init {
         }
 
         on("GET /my-feed,my-other-feed with Accept text/html") {
-            val fakeDataGateway = FakeArticlesDataGateway(articles = availableArticles)
-            val controller = DefaultArticlesController(articlesDataGateway = fakeDataGateway)
+            val fakeArticlesDataGateway = FakeArticlesDataGateway(availableArticles)
+            val fakeFeedsDataGateway = FakeFeedsDataGateway()
+            val controller = DefaultArticlesController(fakeArticlesDataGateway, fakeFeedsDataGateway)
             val listArticlesAsHtmlReq = TestHttpServletRequest(
                 path = "/my-feed,my-other-feed",
                 headers = mapOf("Accept" to listOf("text/html"))
@@ -106,7 +109,7 @@ class ArticlesControllerSpec : Spek() { init {
 
             controller.listArticles(listArticlesAsHtmlReq, listArticlesResp)
 
-            val didSelectByFeedSlugs = fakeDataGateway.didSelectByFeedSlugs
+            val didSelectByFeedSlugs = fakeArticlesDataGateway.didSelectByFeedSlugs
 
             it("gets articles by feeds and sets them onto the request") {
                 val articles = listArticlesAsHtmlReq.getAttribute("articles") as? List<Article>
@@ -123,20 +126,3 @@ class ArticlesControllerSpec : Spek() { init {
         }
     }
 }}
-
-class FakeArticlesDataGateway(var articles: List<Article> = emptyList()) : ArticlesDataGateway {
-
-    override fun create(article: Article, feed: Feed) {
-        throw UnsupportedOperationException()
-    }
-
-    var didSelectByFeedSlugs: Set<String>? = null
-    override fun selectAllByFeedSlugs(slugs: Set<String>): List<Article> {
-        didSelectByFeedSlugs = slugs
-        return articles
-    }
-
-    override fun removeAllByFeed(feed: Feed) {
-        throw UnsupportedOperationException()
-    }
-}

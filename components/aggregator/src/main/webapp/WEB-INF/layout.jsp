@@ -10,6 +10,14 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/small-screens.css">
 </head>
 <body>
-    ${page}
+    <header>
+        <h1>${title}</h1>
+    </header>
+    <aside>
+        ${menu}
+    </aside>
+    <section>
+        ${section}
+    </section>
 </body>
 </html>

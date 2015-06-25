@@ -21,7 +21,7 @@ class FeedsDataGatewaySpec : Spek() { init {
         """)
 
         on("select feeds") {
-            val feeds = dataGateway.selectFeeds()
+            val feeds = dataGateway.selectAllFeeds()
 
             it("returns available feeds") {
                 val expectedFeeds = listOf(
