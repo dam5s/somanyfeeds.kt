@@ -22,7 +22,9 @@ class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway, va
         val path = req.getRequestURI()
         val isRoot = path.length() <= 1
         val slugs = if (isRoot) DEFAULT_FEED_SLUGS else path.removePrefix("/").splitBy(",").toSet()
-        val articles = articlesDataGateway.selectAllByFeedSlugs(slugs)
+        val articles = articlesDataGateway
+            .selectAllByFeedSlugs(slugs)
+            .sortDescendingBy { it.date }
 
         when (expectedContentType(req)) {
             ContentType.JSON -> {

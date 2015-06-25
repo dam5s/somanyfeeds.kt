@@ -7,7 +7,11 @@
 <c:set var="menu">
     <ul>
         <c:forEach items="${feeds}" var="feed">
-            <li><a href="${feed.path}" class="${feed.isSelected ? "selected" : "not-selected"}">${feed.name}</a></li>
+            <li class="${feed.isSelected ? "selected" : "not-selected"}">
+                <a href="${pageContext.request.contextPath}${feed.path}">
+                        ${feed.name}
+                </a>
+            </li>
         </c:forEach>
     </ul>
 </c:set>
