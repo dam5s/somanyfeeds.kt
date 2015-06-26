@@ -21,5 +21,6 @@
     <section id="app-content">
         ${section}
     </section>
+    <script type="application/javascript" src="${pageContext.request.contextPath}/js/app.js"></script>
 </body>
 </html>

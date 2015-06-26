@@ -22,7 +22,7 @@
             <header>
                 <h1><a href="${article.link}">${article.title}</a></h1>
 
-                <h2>${article.date}</h2>
+                <h2 class="date">${article.date}</h2>
             </header>
             <section>
                     ${article.content}
