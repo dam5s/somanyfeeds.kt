@@ -1,35 +1,32 @@
-* {
-    line-height: 130%;
-}
-
 html, body {
     height: 100%;
     margin: 0;
     background-color: #f6f6f6;
     font-size: 14px;
     font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', sans-serif;
-    font-weight: 100;
-    color: #333;
+    font-weight: 300;
+    color: #888;
 }
 
 h1, h2, h3 {
     font-family: 'Roboto Slab', serif;
+    line-height: 130%;
+    color: #333;
+    font-weight: 400;
 }
 
 h1 {
     font-size: 1.8em;
-    font-weight: 400;
     margin: .5em 0;
 }
 
 h2 {
     font-size: 1.3em;
-    font-weight: 300;
 }
 
 a:link, a:hover, a:visited, a:active {
     text-decoration: none;
-    color: coral;
+    color: #00BCD4;
 }
 
 p {
@@ -53,8 +50,7 @@ p {
 
 #app-header {
     height: 5.4em;
-    background-color: rgba(43, 43, 43, .95);
-    color: #fff;
+    background-color: rgba(43, 43, 43, .90);
     position: fixed;
     width: 100%;
     top: 0;
@@ -68,8 +64,7 @@ p {
     margin: 0;
     font-size: 2em;
     line-height: 2.7em;
-
-    transition: font-size .3s ease, line-height .3s ease;
+    color: #fff;
 }
 
 #app-menu {
@@ -90,18 +85,18 @@ p {
 }
 
 #app-menu li:hover {
-    border-color: #76ddff;
+    border-color: #fff;
 }
 
 #app-menu li.selected,
 #app-menu li.selected:hover {
     font-weight: 500;
-    border-color: white;
+    border-color: #00BCD4;
 }
 
 article {
     display: inline-block;
-    background-color: white;
+    background-color: #fff;
     padding: 1em 2em;
     font-size: 1em;
     margin: 1em 1%;
@@ -132,11 +127,14 @@ article h2 {
     float: right;
     font-size: .8em;
     color: #666;
-    padding: 0 1em 0 0;
 }
 
 article img {
     max-width: 96%;
+}
+
+article section {
+    line-height: 180%;
 }
 
 /* Google Plus articles */
