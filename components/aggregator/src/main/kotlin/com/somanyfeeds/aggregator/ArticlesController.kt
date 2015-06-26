@@ -12,7 +12,12 @@ public interface ArticlesController {
     public fun listArticles(req: HttpServletRequest, resp: HttpServletResponse)
 }
 
-class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway, val feedsDataGateway: FeedsDataGateway) : ArticlesController {
+class DefaultArticlesController(
+    val articlesDataGateway: ArticlesDataGateway,
+    val feedsDataGateway: FeedsDataGateway,
+    val feedPresenter: FeedPresenter
+) : ArticlesController {
+
     private val objectMapper = ObjectMapperProvider().get()
     private val DEFAULT_FEED_SLUGS = setOf("gplus", "pivotal")
 
@@ -44,11 +49,11 @@ class DefaultArticlesController(val articlesDataGateway: ArticlesDataGateway, va
     }
 
     private fun renderHTMLArticles(articles: List<Article>, slugs: Set<String>, req: HttpServletRequest, resp: HttpServletResponse) {
-        val feeds = feedsDataGateway.selectAllFeeds()
-        val feedPresenters = feeds.map { FeedPresenter(it, slugs) }
+        val feeds = feedsDataGateway
+            .selectAllFeeds()
+            .map { feedPresenter.present(it, slugs) }
 
-
-        req.setAttribute("feeds", feedPresenters)
+        req.setAttribute("feeds", feeds)
         req.setAttribute("articles", articles)
         req.getRequestDispatcher("/WEB-INF/articles.jsp").forward(req, resp)
     }

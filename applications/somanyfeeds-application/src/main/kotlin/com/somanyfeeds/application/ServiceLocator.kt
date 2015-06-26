@@ -2,6 +2,7 @@ package com.somanyfeeds.application
 
 import com.somanyfeeds.aggregator.ArticlesController
 import com.somanyfeeds.aggregator.DefaultArticlesController
+import com.somanyfeeds.aggregator.FeedPresenter
 import com.somanyfeeds.articlesdataaccess.ArticleDataMapper
 import com.somanyfeeds.articlesdataaccess.PostgresArticlesDataGateway
 import com.somanyfeeds.feedsdataaccess.FeedDataMapper
@@ -30,8 +31,9 @@ object ServiceLocator {
     private val dataSource: DataSource = PostgresDataSourceFactory().create()
     private val sqlSessionFactory = buildSqlSessionFactory(dataSource)
     private val feedsDataGateway = PostgresFeedsDataGateway(sqlSessionFactory)
-    private val articlesDataGateway = PostgresArticlesDataGateway(sqlSessionFactory);
-    private val articlesController = DefaultArticlesController(articlesDataGateway, feedsDataGateway)
+    private val articlesDataGateway = PostgresArticlesDataGateway(sqlSessionFactory)
+    private val feedPresenter = FeedPresenter()
+    private val articlesController = DefaultArticlesController(articlesDataGateway, feedsDataGateway, feedPresenter)
 
     private val scheduledExecutorService: ScheduledExecutorService = ScheduledThreadPoolExecutor(2)
 

@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--@elvariable id="feeds" type="java.util.List<com.somanyfeeds.aggregator.FeedPresenter>"--%>
+<%--@elvariable id="feeds" type="java.util.List<com.somanyfeeds.aggregator.FeedViewModel>"--%>
 <%--@elvariable id="articles" type="java.util.List<com.somanyfeeds.articlesdataaccess.Article>"--%>
 
 <c:set var="title">damo.io</c:set>

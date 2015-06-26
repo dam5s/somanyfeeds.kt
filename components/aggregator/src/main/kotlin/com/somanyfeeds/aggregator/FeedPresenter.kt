@@ -3,13 +3,9 @@ package com.somanyfeeds.aggregator
 import com.somanyfeeds.feedsdataaccess.Feed
 
 class FeedPresenter {
-    val name: String
-    val path: String
-    val isSelected: Boolean
-
-    constructor(feed: Feed, slugs: Set<String>) {
-        name = feed.name
-        isSelected = slugs.contains(feed.slug)
+    fun present(feed: Feed, slugs: Set<String>): FeedViewModel {
+        val name = feed.name
+        val isSelected = slugs.contains(feed.slug)
 
         var pathSlugs: MutableSet<String> = slugs.toMutableSet()
         if (isSelected) {
@@ -18,6 +14,14 @@ class FeedPresenter {
             pathSlugs.add(feed.slug)
         }
 
-        path = "/${pathSlugs.sort().join(",")}"
+        val path = "/${pathSlugs.sort().join(",")}"
+
+        return FeedViewModel(name, path, isSelected)
     }
 }
+
+data class FeedViewModel(
+    val name: String,
+    val path: String,
+    val isSelected: Boolean
+)

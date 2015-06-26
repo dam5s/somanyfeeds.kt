@@ -9,31 +9,30 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class FeedPresenterSpec: Spek() { init {
+    val presenter = FeedPresenter()
+
     given("some feeds and a selected feed") {
         val blog = buildFeed(name = "My Blog", slug = "blog")
-        val photos = buildFeed(name = "My Photos", slug = "photos")
         val github = buildFeed(name = "My Github", slug = "github")
-
-        val allFeeds = listOf(blog, photos, github)
         val slugs = setOf("blog", "photos")
 
         on("creation of a selected feed") {
-            val blogPresenter = FeedPresenter(blog, slugs)
+            val blogViewModel = presenter.present(blog, slugs)
 
             it("sets up the presenter") {
-                assertEquals("My Blog", blogPresenter.name)
-                assertEquals("/photos", blogPresenter.path)
-                assertTrue(blogPresenter.isSelected)
+                assertEquals("My Blog", blogViewModel.name)
+                assertEquals("/photos", blogViewModel.path)
+                assertTrue(blogViewModel.isSelected)
             }
         }
 
         on("creation of a feed that's not selected") {
-            val githubPresenter = FeedPresenter(github, slugs)
+            val githubViewModel = presenter.present(github, slugs)
 
             it("sets up the presenter") {
-                assertEquals("My Github", githubPresenter.name)
-                assertEquals("/blog,github,photos", githubPresenter.path)
-                assertFalse(githubPresenter.isSelected)
+                assertEquals("My Github", githubViewModel.name)
+                assertEquals("/blog,github,photos", githubViewModel.path)
+                assertFalse(githubViewModel.isSelected)
             }
         }
     }

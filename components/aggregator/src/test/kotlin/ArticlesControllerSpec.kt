@@ -1,17 +1,14 @@
 import FakeArticlesDataGateway
+import FakeFeedsDataGateway
 import TestHttpServletRequest
 import TestHttpServletResponse
 import com.somanyfeeds.aggregator.DefaultArticlesController
+import com.somanyfeeds.aggregator.FeedPresenter
 import com.somanyfeeds.articlesdataaccess.Article
-import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
-import com.somanyfeeds.feedsdataaccess.Feed
 import com.somanyfeeds.jsonserialization.ObjectMapperProvider
 import org.jetbrains.spek.api.Spek
 import java.time.ZonedDateTime
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 class ArticlesControllerSpec : Spek() { init {
     val objectMapper = ObjectMapperProvider().get()
@@ -35,7 +32,8 @@ class ArticlesControllerSpec : Spek() { init {
         on("GET / with Accept application/json") {
             val fakeArticlesDataGateway = FakeArticlesDataGateway(availableArticles)
             val fakeFeedsDataGateway = FakeFeedsDataGateway()
-            val controller = DefaultArticlesController(fakeArticlesDataGateway, fakeFeedsDataGateway)
+            val controller = DefaultArticlesController(fakeArticlesDataGateway, fakeFeedsDataGateway, FeedPresenter())
+
             val listArticlesAsJsonReq = TestHttpServletRequest(
                 path = "/",
                 headers = mapOf("Accept" to listOf("application/json"))
@@ -71,7 +69,7 @@ class ArticlesControllerSpec : Spek() { init {
         on("GET / with Accept text/html") {
             val fakeArticlesDataGateway = FakeArticlesDataGateway(availableArticles)
             val fakeFeedsDataGateway = FakeFeedsDataGateway()
-            val controller = DefaultArticlesController(fakeArticlesDataGateway, fakeFeedsDataGateway)
+            val controller = DefaultArticlesController(fakeArticlesDataGateway, fakeFeedsDataGateway, FeedPresenter())
             val listArticlesAsHtmlReq = TestHttpServletRequest(
                 path = "/",
                 headers = mapOf("Accept" to listOf("text/html"))
@@ -100,7 +98,7 @@ class ArticlesControllerSpec : Spek() { init {
         on("GET /my-feed,my-other-feed with Accept text/html") {
             val fakeArticlesDataGateway = FakeArticlesDataGateway(availableArticles)
             val fakeFeedsDataGateway = FakeFeedsDataGateway()
-            val controller = DefaultArticlesController(fakeArticlesDataGateway, fakeFeedsDataGateway)
+            val controller = DefaultArticlesController(fakeArticlesDataGateway, fakeFeedsDataGateway, FeedPresenter())
             val listArticlesAsHtmlReq = TestHttpServletRequest(
                 path = "/my-feed,my-other-feed",
                 headers = mapOf("Accept" to listOf("text/html"))
