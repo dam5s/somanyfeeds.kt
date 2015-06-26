@@ -19,13 +19,13 @@ class ArticlesControllerSpec : Spek() { init {
                 title = "Some great article",
                 link = "http://example.com/article-1",
                 content = "Some great article content...",
-                date = ZonedDateTime.parse("2010-01-30T02:03:04Z")
+                date = ZonedDateTime.parse("2010-01-30T02:03:10Z")
             ),
             Article(
                 title = "Some other article",
                 link = "http://example.com/article-2",
                 content = "Some other article content...",
-                date = ZonedDateTime.parse("2011-01-30T02:03:04Z")
+                date = ZonedDateTime.parse("2011-01-30T02:03:11Z")
             )
         )
 
@@ -50,15 +50,15 @@ class ArticlesControllerSpec : Spek() { init {
                 val articles = objectMapper.readValue(listArticlesResp.getBody(), javaClass<List<Map<String, String>>>())
                 assertEquals(2, articles.size())
 
-                assertEquals("Some great article", articles[0]["title"])
-                assertEquals("http://example.com/article-1", articles[0]["link"])
-                assertEquals("Some great article content...", articles[0]["content"])
-                assertEquals("2010-01-30T02:03:04Z", articles[0]["date"])
+                assertEquals("Some other article", articles[0]["title"])
+                assertEquals("http://example.com/article-2", articles[0]["link"])
+                assertEquals("Some other article content...", articles[0]["content"])
+                assertEquals("2011-01-30T02:03:11Z", articles[0]["date"])
 
-                assertEquals("Some other article", articles[1]["title"])
-                assertEquals("http://example.com/article-2", articles[1]["link"])
-                assertEquals("Some other article content...", articles[1]["content"])
-                assertEquals("2011-01-30T02:03:04Z", articles[1]["date"])
+                assertEquals("Some great article", articles[1]["title"])
+                assertEquals("http://example.com/article-1", articles[1]["link"])
+                assertEquals("Some great article content...", articles[1]["content"])
+                assertEquals("2010-01-30T02:03:10Z", articles[1]["date"])
             }
 
             it("sets the content-type") {
@@ -82,10 +82,10 @@ class ArticlesControllerSpec : Spek() { init {
 
 
             it("gets articles by default feeds and sets them onto the request") {
-                val articles = listArticlesAsHtmlReq.getAttribute("articles") as? List<Article>
+                val articles = listArticlesAsHtmlReq.getAttribute("articles") as List<Article>
 
                 assertEquals(setOf("gplus", "pivotal"), didSelectByFeedSlugs)
-                assertEquals(availableArticles, articles)
+                assertEquals(listOf(availableArticles[1], availableArticles[0]), articles)
             }
 
             it("forwards the request to articles.jsp") {
@@ -113,7 +113,7 @@ class ArticlesControllerSpec : Spek() { init {
                 val articles = listArticlesAsHtmlReq.getAttribute("articles") as? List<Article>
 
                 assertEquals(setOf("my-feed", "my-other-feed"), didSelectByFeedSlugs)
-                assertEquals(availableArticles, articles)
+                assertEquals(listOf(availableArticles[1], availableArticles[0]), articles)
             }
 
             it("forwards the request to articles.jsp") {

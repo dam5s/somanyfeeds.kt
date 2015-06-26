@@ -6,7 +6,6 @@ import org.apache.ibatis.session.SqlSessionFactory
 import org.apache.ibatis.session.SqlSessionFactoryBuilder
 import org.apache.ibatis.transaction.TransactionFactory
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory
-import org.mybatis.spring.SqlSessionFactoryBean
 import org.postgresql.ds.PGSimpleDataSource
 import java.util.Properties
 import javax.sql.DataSource
