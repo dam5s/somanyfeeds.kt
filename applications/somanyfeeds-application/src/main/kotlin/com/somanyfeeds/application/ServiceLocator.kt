@@ -15,33 +15,22 @@ import com.somanyfeeds.feedsprocessing.atom.AtomFeedProcessor
 import com.somanyfeeds.feedsprocessing.rss.RssFeedProcessor
 import com.somanyfeeds.httpgateway.HttpGateway
 import com.somanyfeeds.httpgateway.OkHttpGateway
-import com.somanyfeeds.kotlinextensions.tap
 import com.squareup.okhttp.OkHttpClient
-import org.mybatis.spring.SqlSessionFactoryBean
-import org.mybatis.spring.mapper.MapperFactoryBean
-import org.postgresql.ds.PGSimpleDataSource
+import org.apache.ibatis.mapping.Environment
+import org.apache.ibatis.session.Configuration
+import org.apache.ibatis.session.SqlSessionFactory
+import org.apache.ibatis.session.SqlSessionFactoryBuilder
+import org.apache.ibatis.transaction.TransactionFactory
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledThreadPoolExecutor
 import javax.sql.DataSource
 
 object ServiceLocator {
-    private val dataSource: DataSource = PGSimpleDataSource().tap {
-        setUser("dam5s")
-        setServerName("localhost")
-        setPortNumber(5432)
-        setDatabaseName("somanyfeeds_dev")
-    }
-
-    private val sqlSessionFactoryBean = SqlSessionFactoryBean().tap {
-        setDataSource(dataSource)
-    }
-
-    private val feedDataMapper = buildDataMapper(javaClass<FeedDataMapper>())
-    private val feedsDataGateway = PostgresFeedsDataGateway(feedDataMapper = feedDataMapper)
-
-    private val articleDataMapper = buildDataMapper(javaClass<ArticleDataMapper>())
-    private val articlesDataGateway = PostgresArticlesDataGateway(articleDataMapper, dataSource);
-
+    private val dataSource: DataSource = PostgresDataSourceFactory().create()
+    private val sqlSessionFactory = buildSqlSessionFactory(dataSource)
+    private val feedsDataGateway = PostgresFeedsDataGateway(sqlSessionFactory)
+    private val articlesDataGateway = PostgresArticlesDataGateway(sqlSessionFactory);
     private val articlesController = DefaultArticlesController(articlesDataGateway, feedsDataGateway)
 
     private val scheduledExecutorService: ScheduledExecutorService = ScheduledThreadPoolExecutor(2)
@@ -65,15 +54,14 @@ object ServiceLocator {
     fun articlesController(): ArticlesController = articlesController
     fun feedUpdatesScheduler(): FeedUpdatesScheduler = feedUpdatesScheduler
 
-    private fun buildDataMapper<T>(klass: Class<T>): T {
-        val sqlSessionFactory = sqlSessionFactoryBean.getObject().tap {
-            getConfiguration().addMapper(klass)
-        }
+    private fun buildSqlSessionFactory(dataSource: DataSource): SqlSessionFactory {
+        val transactionFactory: TransactionFactory = JdbcTransactionFactory()
+        val environment = Environment("development", transactionFactory, dataSource)
+        val configuration = Configuration(environment)
 
-        return MapperFactoryBean<T>().let { dataMapperFactory ->
-            dataMapperFactory.setMapperInterface(klass)
-            dataMapperFactory.setSqlSessionFactory(sqlSessionFactory)
-            dataMapperFactory.getObject()
-        }
+        configuration.addMapper(javaClass<FeedDataMapper>())
+        configuration.addMapper(javaClass<ArticleDataMapper>())
+
+        return SqlSessionFactoryBuilder().build(configuration)
     }
 }

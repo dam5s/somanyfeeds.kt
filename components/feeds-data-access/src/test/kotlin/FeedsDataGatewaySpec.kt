@@ -6,9 +6,8 @@ import com.somanyfeeds.feedsdataaccess.PostgresFeedsDataGateway
 import com.somanyfeeds.feedsdataaccess.FeedDataMapper
 
 class FeedsDataGatewaySpec : Spek() { init {
-    val dbConfig = TestDatabaseConfig()
-    val dataMapper = dbConfig.buildTestDataMapper(javaClass<FeedDataMapper>())
-    val dataGateway = PostgresFeedsDataGateway(dataMapper)
+    val dbConfig = TestDatabaseConfig(javaClass<FeedDataMapper>())
+    val dataGateway = PostgresFeedsDataGateway(dbConfig.sqlSessionFactory)
 
     given("some feeds in the database") {
         dbConfig.executeSql("delete from article")

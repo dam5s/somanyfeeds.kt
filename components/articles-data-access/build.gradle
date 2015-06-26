@@ -1,6 +1,6 @@
 dependencies {
     compile project(":components/feeds-data-access")
-    compile "org.mybatis:mybatis:$myBatisVersion"
+    compile project(":components/database-access")
 
     testCompile project(":components/database-testing")
 }

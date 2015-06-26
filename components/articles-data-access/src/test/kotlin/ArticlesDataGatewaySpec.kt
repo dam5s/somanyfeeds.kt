@@ -11,9 +11,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class ArticlesDataGatewaySpec : Spek() { init {
-    val dbConfig = TestDatabaseConfig()
-    val dataMapper = dbConfig.buildTestDataMapper(javaClass<ArticleDataMapper>())
-    val dataGateway = PostgresArticlesDataGateway(articleDataMapper = dataMapper, dataSource = dbConfig.dataSource)
+    val dbConfig = TestDatabaseConfig(javaClass<ArticleDataMapper>())
+    val dataGateway = PostgresArticlesDataGateway(dbConfig.sqlSessionFactory)
 
     given("some articles and feeds") {
         dbConfig.executeSql("delete from article")

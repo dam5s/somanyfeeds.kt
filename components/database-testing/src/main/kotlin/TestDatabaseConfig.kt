@@ -1,14 +1,19 @@
-import org.postgresql.ds.PGSimpleDataSource
-import javax.sql.DataSource
-import org.mybatis.spring.mapper.MapperFactoryBean
-import org.mybatis.spring.SqlSessionFactoryBean
-import java.util.Properties
-import com.somanyfeeds.kotlinextensions.tap
 import com.somanyfeeds.kotlinextensions.getResourceAsStream
+import com.somanyfeeds.kotlinextensions.tap
+import org.apache.ibatis.mapping.Environment
+import org.apache.ibatis.session.Configuration
+import org.apache.ibatis.session.SqlSessionFactory
+import org.apache.ibatis.session.SqlSessionFactoryBuilder
+import org.apache.ibatis.transaction.TransactionFactory
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory
+import org.mybatis.spring.SqlSessionFactoryBean
+import org.postgresql.ds.PGSimpleDataSource
+import java.util.Properties
+import javax.sql.DataSource
 
-class TestDatabaseConfig {
+class TestDatabaseConfig(mapperType: Class<*>) {
     val dataSource: DataSource = buildTestDataSource()
-    val sqlSessionFactoryBean = SqlSessionFactoryBean().tap { setDataSource(dataSource) }
+    val sqlSessionFactory = buildSqlSessionFactory(dataSource, mapperType)
 
     private fun buildTestDataSource(): PGSimpleDataSource {
         val props = Properties().tap { load(getResourceAsStream("connection.properties")) }
@@ -21,16 +26,14 @@ class TestDatabaseConfig {
         }
     }
 
-    public fun buildTestDataMapper<T>(klass: Class<T>): T {
-        val sqlSessionFactory = sqlSessionFactoryBean.getObject().tap {
-            getConfiguration().addMapper(klass)
-        }
+    private fun buildSqlSessionFactory(dataSource: DataSource, mapperType: Class<*>): SqlSessionFactory {
+        val transactionFactory: TransactionFactory = JdbcTransactionFactory()
+        val environment = Environment("development", transactionFactory, dataSource)
+        val configuration = Configuration(environment)
 
-        return MapperFactoryBean<T>().let { dataMapperFactory ->
-            dataMapperFactory.setMapperInterface(klass)
-            dataMapperFactory.setSqlSessionFactory(sqlSessionFactory)
-            dataMapperFactory.getObject()
-        }
+        configuration.addMapper(mapperType)
+
+        return SqlSessionFactoryBuilder().build(configuration)
     }
 
     fun executeSql(sql: String) {

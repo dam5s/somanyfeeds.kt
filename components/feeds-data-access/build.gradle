@@ -1,5 +1,5 @@
 dependencies {
-    compile "org.mybatis:mybatis:$myBatisVersion"
+    compile project(":components/database-access")
 
     testCompile project(":components/database-testing")
 }

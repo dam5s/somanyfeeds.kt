@@ -5,15 +5,12 @@ dependencies {
     compile project(":components/articles-data-access")
     compile project(":components/feeds-data-access")
     compile project(":components/feeds-processing")
+    compile project(":components/json-serialization")
 
     compile "javax:javaee-api:7.0"
+    compile "com.zaxxer:HikariCP:2.3.8"
     compile "org.postgresql:postgresql:9.4-1200-jdbc41"
     compile "org.mybatis:mybatis:$myBatisVersion"
-
-    compile "org.mybatis:mybatis-spring:1.2.2"
-    compile "org.springframework:spring-beans:4.1.5.RELEASE"
-    compile "org.springframework:spring-context:4.1.5.RELEASE"
-    compile "org.springframework:spring-jdbc:4.1.5.RELEASE"
 
     testCompile "javax.servlet:javax.servlet-api:3.1.0"
     testCompile project(":components/http-servlet-testing")

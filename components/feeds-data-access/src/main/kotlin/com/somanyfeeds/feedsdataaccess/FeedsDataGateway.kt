@@ -1,14 +1,18 @@
 package com.somanyfeeds.feedsdataaccess
 
+import com.somanyfeeds.databaseaccess.withMapper
 import org.apache.ibatis.annotations.Select
+import org.apache.ibatis.session.SqlSessionFactory
 
 interface FeedsDataGateway {
     fun selectAllFeeds(): List<Feed>
 }
 
-class PostgresFeedsDataGateway(val feedDataMapper: FeedDataMapper) : FeedsDataGateway {
+class PostgresFeedsDataGateway(val sqlSessionFactory: SqlSessionFactory) : FeedsDataGateway {
     override fun selectAllFeeds(): List<Feed> =
-        feedDataMapper.selectFeeds().map { it.buildFeed() }
+        sqlSessionFactory.withMapper(javaClass<FeedDataMapper>()) {
+            selectFeeds().map { it.buildFeed() }
+        }
 }
 
 interface FeedDataMapper {

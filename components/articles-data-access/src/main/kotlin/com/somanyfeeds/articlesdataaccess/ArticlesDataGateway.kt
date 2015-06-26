@@ -1,11 +1,13 @@
 package com.somanyfeeds.articlesdataaccess
 
+import com.somanyfeeds.databaseaccess.withMapper
 import com.somanyfeeds.feedsdataaccess.Feed
 import com.somanyfeeds.kotlinextensions.toUtcZonedDateTime
 import org.apache.ibatis.annotations.Delete
 import org.apache.ibatis.annotations.Insert
 import org.apache.ibatis.annotations.Param
 import org.apache.ibatis.annotations.Select
+import org.apache.ibatis.session.SqlSessionFactory
 import java.sql.Timestamp
 import java.time.ZoneId
 import javax.sql.DataSource
@@ -18,18 +20,23 @@ public interface ArticlesDataGateway {
     fun removeAllByFeed(feed: Feed)
 }
 
-class PostgresArticlesDataGateway(val articleDataMapper: ArticleDataMapper, val dataSource: DataSource) : ArticlesDataGateway {
+class PostgresArticlesDataGateway(val sqlSessionFactory: SqlSessionFactory) : ArticlesDataGateway {
 
     override fun create(article: Article, feed: Feed) =
-        articleDataMapper.create(ArticleMapping(article, feed.id!!))
+        sqlSessionFactory.withMapper(javaClass<ArticleDataMapper>()) {
+            create(ArticleMapping(article, feed.id!!))
+        }
 
-    override fun selectAllByFeedSlugs(slugs: Set<String>): List<Article> {
-        val slugsArray = dataSource.getConnection().createArrayOf("text", slugs.toTypedArray())
-        return articleDataMapper.selectAllByFeedSlugs(slugsArray).map { it.buildArticle() }
-    }
+    override fun selectAllByFeedSlugs(slugs: Set<String>): List<Article> =
+        sqlSessionFactory.withMapper(javaClass<ArticleDataMapper>()) { session ->
+            val slugsArray = session.getConnection().createArrayOf("text", slugs.toTypedArray())
+            selectAllByFeedSlugs(slugsArray).map { it.buildArticle() }
+        }
 
     override fun removeAllByFeed(feed: Feed) =
-        articleDataMapper.removeAllByFeed(feed)
+        sqlSessionFactory.withMapper(javaClass<ArticleDataMapper>()) {
+            removeAllByFeed(feed)
+        }
 }
 
 interface ArticleDataMapper {
