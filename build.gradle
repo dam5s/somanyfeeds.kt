@@ -4,7 +4,7 @@ description "SoManyFeeds a simple feed aggregator"
 
 buildscript {
     ext {
-        kotlinVersion = "0.12.412"
+        kotlinVersion = "0.12.613"
         myBatisVersion = "3.2.8"
         slf4jVersion = "1.7.12"
     }
