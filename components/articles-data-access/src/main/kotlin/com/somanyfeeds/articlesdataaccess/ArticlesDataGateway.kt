@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Select
 import org.apache.ibatis.session.SqlSessionFactory
 import java.sql.Timestamp
 import java.time.ZoneId
-import javax.sql.DataSource
+import javax.inject.Inject
 
 public interface ArticlesDataGateway {
     fun create(article: Article, feed: Feed)
@@ -20,7 +20,8 @@ public interface ArticlesDataGateway {
     fun removeAllByFeed(feed: Feed)
 }
 
-class PostgresArticlesDataGateway(val sqlSessionFactory: SqlSessionFactory) : ArticlesDataGateway {
+class PostgresArticlesDataGateway
+    @Inject constructor(val sqlSessionFactory: SqlSessionFactory) : ArticlesDataGateway {
 
     override fun create(article: Article, feed: Feed) =
         sqlSessionFactory.withMapper(javaClass<ArticleDataMapper>()) {

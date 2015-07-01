@@ -10,8 +10,9 @@ import com.somanyfeeds.kotlinextensions.tap
 import org.slf4j.LoggerFactory
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import javax.inject.Inject
 
-public class AtomFeedProcessor(val httpGateway: HttpGateway) : FeedProcessor {
+public class AtomFeedProcessor @Inject constructor(val httpGateway: HttpGateway) : FeedProcessor {
     private val logger = LoggerFactory.getLogger(javaClass<AtomFeedProcessor>())
     private val xmlMapper = XmlMapper().tap { configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) }
     private val utc = ZoneId.of("UTC")

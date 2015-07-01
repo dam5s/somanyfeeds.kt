@@ -5,6 +5,7 @@ import com.somanyfeeds.articlesdataaccess.ArticlesDataGateway
 import com.somanyfeeds.feedsdataaccess.FeedsDataGateway
 import com.somanyfeeds.jsonserialization.ObjectMapperProvider
 import java.util.Enumeration
+import javax.inject.Inject
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -12,7 +13,7 @@ public interface ArticlesController {
     public fun listArticles(req: HttpServletRequest, resp: HttpServletResponse)
 }
 
-class DefaultArticlesController(
+class DefaultArticlesController @Inject constructor(
     val articlesDataGateway: ArticlesDataGateway,
     val feedsDataGateway: FeedsDataGateway,
     val feedPresenter: FeedPresenter

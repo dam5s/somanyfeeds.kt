@@ -10,9 +10,9 @@ import com.somanyfeeds.kotlinextensions.tap
 import org.slf4j.LoggerFactory
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import kotlin.text.Regex
+import javax.inject.Inject
 
-public class RssFeedProcessor(val httpGateway: HttpGateway) : FeedProcessor {
+public class RssFeedProcessor @Inject constructor(val httpGateway: HttpGateway) : FeedProcessor {
     private val logger = LoggerFactory.getLogger(javaClass<RssFeedProcessor>())
     private val xmlMapper = XmlMapper().tap { configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false) }
     private val utc = ZoneId.of("UTC")

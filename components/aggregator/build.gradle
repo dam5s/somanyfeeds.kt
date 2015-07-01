@@ -5,6 +5,7 @@ dependencies {
     compile project(":components/articles-data-access")
 
     compile "javax:javaee-api:7.0"
+    compile "javax.inject:javax.inject:1"
     providedRuntime "javax.servlet.jsp:jsp-api:2.2"
     providedRuntime "javax.servlet:jstl:1.2"
 

@@ -1,5 +1,6 @@
 dependencies {
     compile project(":components/database-access")
+    compile "javax.inject:javax.inject:1"
 
     testCompile project(":components/database-testing")
 }

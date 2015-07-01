@@ -1,16 +1,16 @@
 package com.somanyfeeds.feedsprocessing
 
-import com.somanyfeeds.articlesdataaccess.Article
 import com.somanyfeeds.feedsdataaccess.FeedType
 import com.somanyfeeds.feedsdataaccess.FeedsDataGateway
-import java.util.ArrayList
+import javax.inject.Inject
 
 
-class FeedsUpdater(
-    val feedsDataGateway: FeedsDataGateway,
-    val articlesUpdater: ArticlesUpdater,
-    val feedProcessors: Map<FeedType, FeedProcessor>
-) : Runnable {
+class FeedsUpdater
+    @Inject constructor(
+        val feedsDataGateway: FeedsDataGateway,
+        val articlesUpdater: ArticlesUpdater,
+        val feedProcessors: Map<FeedType, FeedProcessor>
+    ) : Runnable {
 
     override fun run() {
         for (feed in feedsDataGateway.selectAllFeeds()) {

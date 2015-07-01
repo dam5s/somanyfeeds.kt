@@ -2,6 +2,8 @@ import FakeFeedUpdatesScheduler
 import TestHttpServletRequest
 import TestHttpServletResponse
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.somanyfeeds.aggregator.ArticlesController
+import com.somanyfeeds.application.SoManyFeedsComponent
 import com.somanyfeeds.application.SoManyFeedsServlet
 import com.somanyfeeds.feedsprocessing.FeedUpdatesScheduler
 import org.jetbrains.spek.api.Spek
@@ -10,8 +12,9 @@ import kotlin.test.assertTrue
 
 class SoManyFeedsServletSpec : Spek() { init {
     given("a SoManyFeedsServlet") {
+        val articlesController = SoManyFeedsComponent.build().articlesController()
         val fakeScheduler = FakeFeedUpdatesScheduler()
-        val servlet = SoManyFeedsServlet(feedUpdatesScheduler = fakeScheduler)
+        val servlet = SoManyFeedsServlet(FakeSoManyFeedsComponent(articlesController, fakeScheduler))
 
         on("init") {
             it("starts the feed updates scheduler") {
@@ -43,6 +46,12 @@ class SoManyFeedsServletSpec : Spek() { init {
         }
     }
 }}
+
+class FakeSoManyFeedsComponent(val articlesController: ArticlesController, val feedUpdatesScheduler: FeedUpdatesScheduler) : SoManyFeedsComponent {
+    override fun articlesController(): ArticlesController = articlesController
+
+    override fun feedUpdatesScheduler(): FeedUpdatesScheduler = feedUpdatesScheduler
+}
 
 class FakeFeedUpdatesScheduler : FeedUpdatesScheduler {
     var didStart = false

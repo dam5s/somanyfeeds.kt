@@ -1,8 +1,9 @@
 package com.somanyfeeds.aggregator
 
 import com.somanyfeeds.feedsdataaccess.Feed
+import javax.inject.Inject
 
-class FeedPresenter {
+class FeedPresenter @Inject constructor() {
     fun present(feed: Feed, slugs: Set<String>): FeedViewModel {
         val name = feed.name
         val isSelected = slugs.contains(feed.slug)

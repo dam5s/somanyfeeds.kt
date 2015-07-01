@@ -1,15 +1,16 @@
 package com.somanyfeeds.feedsprocessing;
 
 import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 interface FeedUpdatesScheduler {
     fun start()
     fun stop()
 }
 
-class DefaultFeedUpdatesScheduler(
+class DefaultFeedUpdatesScheduler @Inject constructor(
     val scheduledExecutorService: ScheduledExecutorService,
     val feedsUpdater: Runnable
 ) : FeedUpdatesScheduler {

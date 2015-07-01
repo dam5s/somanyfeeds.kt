@@ -3,12 +3,15 @@ package com.somanyfeeds.feedsdataaccess
 import com.somanyfeeds.databaseaccess.withMapper
 import org.apache.ibatis.annotations.Select
 import org.apache.ibatis.session.SqlSessionFactory
+import javax.inject.Inject
 
 interface FeedsDataGateway {
     fun selectAllFeeds(): List<Feed>
 }
 
-class PostgresFeedsDataGateway(val sqlSessionFactory: SqlSessionFactory) : FeedsDataGateway {
+class PostgresFeedsDataGateway
+    @Inject constructor(val sqlSessionFactory: SqlSessionFactory) : FeedsDataGateway {
+
     override fun selectAllFeeds(): List<Feed> =
         sqlSessionFactory.withMapper(javaClass<FeedDataMapper>()) {
             selectFeeds().map { it.buildFeed() }
