@@ -9,18 +9,21 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/base.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/small-screens.css">
+
+    <link rel="apple-touch-icon" href="${pageContext.request.contextPath}/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/favicon.png">
 </head>
 <body>
-    <header id="app-header">
-        <h1>${title}</h1>
+<header id="app-header">
+    <h1>${title}</h1>
 
-        <aside id="app-menu">
-            ${menu}
-        </aside>
-    </header>
-    <section id="app-content">
-        ${section}
-    </section>
-    <script type="application/javascript" src="${pageContext.request.contextPath}/js/app.js"></script>
+    <aside id="app-menu">
+        ${menu}
+    </aside>
+</header>
+<section id="app-content">
+    ${section}
+</section>
+<script type="application/javascript" src="${pageContext.request.contextPath}/js/app.js"></script>
 </body>
 </html>
