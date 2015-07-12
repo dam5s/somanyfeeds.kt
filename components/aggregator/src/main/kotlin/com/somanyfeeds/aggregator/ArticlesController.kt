@@ -23,8 +23,6 @@ class DefaultArticlesController @Inject constructor(
     private val DEFAULT_FEED_SLUGS = setOf("gplus", "pivotal")
 
     override fun listArticles(req: HttpServletRequest, resp: HttpServletResponse) {
-        resp.setContentType("application/json")
-
         val path = req.getRequestURI()
         val isRoot = path.length() <= 1
         val slugs = if (isRoot) DEFAULT_FEED_SLUGS else path.removePrefix("/").splitBy(",").toSet()
@@ -46,6 +44,7 @@ class DefaultArticlesController @Inject constructor(
     }
 
     private fun renderJSONArticles(articles: List<Article>, resp: HttpServletResponse) {
+        resp.setContentType("application/json")
         objectMapper.writeValue(resp.getWriter(), articles)
     }
 
@@ -64,7 +63,7 @@ class DefaultArticlesController @Inject constructor(
             if (accept.contains("application/json")) {
                 return ContentType.JSON
             }
-            if (accept.contains("text/html") || accept.contains("application/xhtml+xml")) {
+            if (accept.contains("text/html") || accept.contains("application/xhtml+xml") || accept.contains("*/*")) {
                 return ContentType.HTML
             }
         }
