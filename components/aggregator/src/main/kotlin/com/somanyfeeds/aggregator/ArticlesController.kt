@@ -59,7 +59,7 @@ class DefaultArticlesController @Inject constructor(
     }
 
     private fun expectedContentType(req: HttpServletRequest) : ContentType {
-        for (accept in req.getHeaders("Accept") as Enumeration<String>) {
+        for (accept in req.getHeaders("Accept")) {
             if (accept.contains("application/json")) {
                 return ContentType.JSON
             }
