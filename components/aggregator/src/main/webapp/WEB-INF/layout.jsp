@@ -15,7 +15,28 @@
 </head>
 <body>
 <header id="app-header">
-    <h1>${title}</h1>
+    <h1>
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200">
+            <circle
+                    cx="595"
+                    cy="100"
+                    r="130"
+                    fill="#00BCD4"
+                    >
+            </circle>
+            <text
+                    x="0"
+                    y="160"
+                    text-anchor="start"
+                    font-family="Roboto Slab"
+                    font-size="180"
+                    font-weight="500"
+                    fill="#FFFFFF"
+                    >
+                ${title}
+            </text>
+        </svg>
+    </h1>
 
     <aside id="app-menu">
         ${menu}

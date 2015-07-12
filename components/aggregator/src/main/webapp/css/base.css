@@ -67,6 +67,16 @@ p {
     color: #fff;
 }
 
+#app-header h1 svg {
+    width: 7em;
+    height: 2.7em;
+
+    filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.9));
+    -webkit-filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.9));
+    -moz-filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.9));
+    -o-filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.9));
+}
+
 #app-menu {
     margin: 0;
     position: absolute;
