@@ -1,3 +1,0 @@
-[submodule "vendor/spek"]
-	path = vendor/spek
-	url = git@github.com:dam5s/spek.git
